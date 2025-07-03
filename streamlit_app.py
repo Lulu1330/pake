@@ -1,9 +1,12 @@
 import streamlit as st
 import random
 import json
+import os
+
 
 # Chargement de la base de données
-with open("data/cartes_base.json", "r", encoding="utf-8") as f:
+path = os.path.join(os.path.dirname(__file__), "cartes_base.json")
+with open(path, "r", encoding="utf-8") as f:
     cartes = json.load(f)
 
 st.set_page_config(layout="wide")
