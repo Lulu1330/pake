@@ -1,30 +1,60 @@
 import streamlit as st
-import json
-import os
+import sqlite3
 from uuid import uuid4
 import base64
+import os
 
-FICHIER_BASE = "data/cartes_base.json"
-os.makedirs("data", exist_ok=True)
+# 📁 Dossier pour la base
+os.makedirs("pake", exist_ok=True)
+DB_PATH = "cartes.db"
 
-# 📥 Chargement
+# 🔧 Initialisation de la base
+def init_db():
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS cartes (
+            id TEXT PRIMARY KEY,
+            nom TEXT NOT NULL,
+            theme TEXT NOT NULL,
+            couleur TEXT NOT NULL
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+# 📥 Récupérer toutes les cartes
 def charger_cartes():
-    if not os.path.exists(FICHIER_BASE):
-        return []
-    with open(FICHIER_BASE, "r", encoding="utf-8") as f:
-        return json.load(f)
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("SELECT id, nom, theme, couleur FROM cartes")
+    rows = c.fetchall()
+    conn.close()
+    return [{"id": r[0], "nom": r[1], "theme": r[2], "couleur": r[3]} for r in rows]
 
-# 💾 Sauvegarde
-def sauvegarder_cartes(cartes):
-    with open(FICHIER_BASE, "w", encoding="utf-8") as f:
-        json.dump(cartes, f, indent=2, ensure_ascii=False)
+# 💾 Ajouter une carte
+def ajouter_carte(id, nom, theme, couleur):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("INSERT INTO cartes (id, nom, theme, couleur) VALUES (?, ?, ?, ?)", (id, nom, theme, couleur))
+    conn.commit()
+    conn.close()
 
-# 📤 Exporter en base64 lien téléchargeable
+# 🗑️ Supprimer une carte
+def supprimer_carte(id):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("DELETE FROM cartes WHERE id = ?", (id,))
+    conn.commit()
+    conn.close()
+
+# 📤 Générer un lien de téléchargement
 def generer_lien_telechargement(data, nom_fichier):
-    b64 = base64.b64encode(json.dumps(data, indent=2, ensure_ascii=False).encode()).decode()
+    b64 = base64.b64encode(str(data).encode()).decode()
     return f'<a href="data:file/json;base64,{b64}" download="{nom_fichier}">📥 Télécharger ce thème</a>'
 
-# 🧠 Chargement initial
+# 🚀 Lancement
+init_db()
 cartes = charger_cartes()
 
 # 📋 Interface
@@ -33,19 +63,12 @@ st.title("📚 Base de données des cartes")
 with st.form("ajout_carte"):
     nom = st.text_input("Nom de la carte")
     theme = st.text_input("Thème")
-    couleur = st.color_picker("Couleur associée au thème", "#f39c12")
+    couleur = st.color_picker("Couleur associée", "#f39c12")
     submit = st.form_submit_button("Ajouter la carte")
 
     if submit:
         if nom.strip() and theme.strip():
-            carte = {
-                "id": str(uuid4()),
-                "nom": nom.strip(),
-                "theme": theme.strip(),
-                "couleur": couleur
-            }
-            cartes.append(carte)
-            sauvegarder_cartes(cartes)
+            ajouter_carte(str(uuid4()), nom.strip(), theme.strip(), couleur)
             st.success(f"Carte '{nom}' ajoutée avec succès.")
             st.rerun()
         else:
@@ -57,17 +80,16 @@ filtre_theme = st.selectbox("🎯 Filtrer par thème", ["Tous"] + themes_existan
 
 cartes_affichees = cartes if filtre_theme == "Tous" else [c for c in cartes if c["theme"] == filtre_theme]
 
-# 📤 Export du thème filtré
+# 📤 Export JSON
 if filtre_theme != "Tous" and cartes_affichees:
     st.markdown(generer_lien_telechargement(cartes_affichees, f"{filtre_theme}.json"), unsafe_allow_html=True)
 
-# 🃏 Affichage en grille 3 colonnes
+# 🃏 Affichage en grille
 st.subheader(f"{len(cartes_affichees)} carte(s) affichée(s)")
-
 cols = st.columns(3)
 
 for i, carte in enumerate(cartes_affichees):
-    nom = carte['nom']
+    nom = carte["nom"]
     taille = 35
     if len(nom) > 15:
         taille = 20
@@ -86,8 +108,7 @@ for i, carte in enumerate(cartes_affichees):
                 height: 300px;
                 position: relative;
                 box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
-                overflow: hidden;
-            ">
+                overflow: hidden;">
                 <div style="
                     position: absolute;
                     top: 50%;
@@ -98,8 +119,7 @@ for i, carte in enumerate(cartes_affichees):
                     font-weight: bold;
                     color: {carte['couleur']};
                     padding: 0 10px;
-                    word-wrap: break-word;
-                ">
+                    word-wrap: break-word;">
                     {nom}
                 </div>
                 <div style="
@@ -108,8 +128,7 @@ for i, carte in enumerate(cartes_affichees):
                     left: 50%;
                     transform: translateX(-50%);
                     font-size: 18px;
-                    color: #666;
-                ">
+                    color: #666;">
                     {carte['theme']}
                 </div>
             </div>
@@ -117,9 +136,7 @@ for i, carte in enumerate(cartes_affichees):
             unsafe_allow_html=True
         )
 
-        # 🗑️ Suppression
-        if st.button(f"🗑️ Supprimer", key=f"del_{carte['id']}"):
-            cartes = [c for c in cartes if c["id"] != carte["id"]]
-            sauvegarder_cartes(cartes)
-            st.success(f"Carte supprimée : {nom}")
+        if st.button("🗑️ Supprimer", key=f"del_{carte['id']}"):
+            supprimer_carte(carte["id"])
+            st.success(f"Carte supprimée : {carte['nom']}")
             st.rerun()
