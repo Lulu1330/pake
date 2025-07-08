@@ -2,6 +2,17 @@ import streamlit as st
 import random
 from utils import charger_cartes, tirer_cartes, remplacer_carte
 
+import sqlite3
+
+def charger_themes():
+    conn = sqlite3.connect("cartes.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT DISTINCT theme FROM cartes")
+    themes = [row[0] for row in cursor.fetchall()]
+    conn.close()
+    return sorted(themes)
+
+
 # Chargement des données
 cartes = charger_cartes()
 st.set_page_config(layout="wide")
@@ -21,23 +32,31 @@ if 'cartes_team2' not in st.session_state:
     st.session_state['cartes_team2'] = []
 
 
-# Choix des thèmes et nombre de cartes
-themes_disponibles = sorted(set(c["theme"] for c in cartes))
-themes_choisis = st.sidebar.multiselect("Choisissez un ou plusieurs thèmes :", themes_disponibles)
+st.sidebar.markdown("### Choix des thèmes")
+
+# Ajout de l'option "Tout"
+tout_selectionner = st.sidebar.checkbox("✅ Tout sélectionner", value=False)
+
+# Liste des thèmes cochables
+themes_choisis = []
+themes_disponibles = charger_themes()
+
+if tout_selectionner:
+    themes_choisis = themes_disponibles
+else:
+    for theme in themes_disponibles:
+        if st.sidebar.checkbox(theme):
+            themes_choisis.append(theme)
+
+# Nombre de cartes
 nb_cartes = st.sidebar.number_input("Nombre de cartes à tirer :", min_value=1, value=10)
+
 
 # Bouton de tirage
 if st.sidebar.button("🎲 Lancer le tirage"):
     st.session_state['slides'] = tirer_cartes(cartes, themes_choisis, nb_cartes)
     st.session_state['index'] = -1
     st.session_state['mise_de_cote'] = []
-
-# Bouton remélanger
-if st.sidebar.button("🔁 Remélanger"):
-    if 'slides' in st.session_state:
-        random.shuffle(st.session_state['slides'])
-        st.session_state['index'] = -1
-        st.rerun()
 
 # Affichage et navigation
 index = st.session_state.get('index', -1)
@@ -71,7 +90,7 @@ if 0 <= index < len(slides):
                 color: {carte['couleur']};
                 box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.1);
             ">
-                {carte['nom']}
+                {carte['carte']}
             </div>
             <div style="
                 position: absolute;
@@ -157,7 +176,7 @@ if st.session_state['show_all_cards']:
                     margin-bottom: 10px;
                     box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
                 ">
-                    {carte['nom']}<br><small style="color: #666;">{carte['theme']}</small>
+                    {carte['carte']}<br><small style="color: #666;">{carte['theme']}</small>
                 </div>
             """, unsafe_allow_html=True)
 
@@ -207,11 +226,26 @@ if st.session_state['cartes_team1'] or st.session_state['cartes_team2']:
     with col1:
         st.markdown("### 🟥 Team 1")
         for carte in st.session_state['cartes_team1']:
-            st.markdown(f"- {carte['nom']} ({carte['theme']})")
+            st.markdown(f"- {carte['carte']} ({carte['theme']})")
+
 
     with col2:
         st.markdown("### 🟦 Team 2")
         for carte in st.session_state['cartes_team2']:
-            st.markdown(f"- {carte['nom']} ({carte['theme']})")
+            st.markdown(f"- {carte['carte']} ({carte['theme']})")
 
     st.markdown(f"### Score : 🟥 {st.session_state['scores']['Team 1']} – 🟦 {st.session_state['scores']['Team 2']}")
+
+if st.sidebar.button("🔁 Remélanger les cartes gagnées"):
+    # Récupérer les cartes gagnées des deux équipes
+    cartes_gagnees = st.session_state['cartes_team1'] + st.session_state['cartes_team2']
+    
+    if cartes_gagnees:
+        random.shuffle(cartes_gagnees)
+        st.session_state['slides'] = cartes_gagnees
+        st.session_state['index'] = -1
+        st.success(f"{len(cartes_gagnees)} carte(s) remélangée(s) à partir des équipes.")
+        st.rerun()
+    else:
+        st.warning("Aucune carte gagnée à remélanger.")
+

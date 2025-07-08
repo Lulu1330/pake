@@ -9,7 +9,7 @@ def charger_cartes():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row  # pour accéder aux colonnes par nom
     cursor = conn.cursor()
-    cursor.execute("SELECT id, nom, theme, couleur FROM cartes")
+    cursor.execute("SELECT id, carte, theme, couleur FROM cartes")
     cartes = [dict(row) for row in cursor.fetchall()]
     conn.close()
     return cartes
