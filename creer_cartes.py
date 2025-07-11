@@ -61,20 +61,27 @@ st.subheader("➕ Ajouter une carte")
 with st.form("form_ajout"):
     carte = st.text_input("Nom de la carte")
     theme = st.text_input("Thème")
-    couleur = st.color_picker("Couleur", "#f39c12")
+    couleur = st.color_picker("Couleur")
     submit = st.form_submit_button("Ajouter")
     if submit:
         if carte.strip() and theme.strip():
-            ajouter_carte(carte.strip(), theme.strip(), couleur)
-            st.success("Carte ajoutée.")
-            st.rerun()
+            cartes_existantes = charger_cartes()
+            noms_existants = [c[1].strip().lower() for c in cartes_existantes]
+            
+            if carte.strip().lower() in noms_existants:
+                st.warning(f"⚠️ La carte « {carte} » existe déjà dans la base.")
+            else:
+                ajouter_carte(carte.strip(), theme.strip(), couleur)
+                st.success("Carte ajoutée.")
+                st.rerun()
+
         else:
             st.error("Nom et thème requis.")
 
 # 🔍 Barre de recherche
 st.subheader("🔍 Filtrer les cartes")
 filtre_carte = st.text_input("Filtrer par carte (partiel)")
-filtre_theme = st.text_input("Filtrer par thème (partiel)")
+filtre_theme = st.text_input("Filtrer par thème (exact)")
 filtre_couleur = st.text_input("Filtrer par couleur (code hex ou nom partiel)")
 
 # 📋 Cartes avec filtres
@@ -82,7 +89,7 @@ cartes = charger_cartes()
 cartes_filtres = [
     c for c in cartes
     if filtre_carte.lower() in c[1].lower()
-    and filtre_theme.lower() in c[2].lower()
+    and (filtre_theme.strip().lower() == c[2].strip().lower() if filtre_theme.strip() else True)
     and filtre_couleur.lower() in c[3].lower()
 ]
 
