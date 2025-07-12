@@ -27,6 +27,5 @@ def remplacer_carte(cartes, tirage, index, mises_de_cote):
         c for c in cartes
         if c not in tirage
         and c not in mises_de_cote
-        and c['theme'] == carte_actuelle['theme']
     ]
     return random.choice(disponibles) if disponibles else None

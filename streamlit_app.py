@@ -60,8 +60,19 @@ st.markdown("""
 .card:hover {
     transform: scale(1.02);
 }
+
+/* 🔽 Ajout de la partie responsive mobile */
+@media only screen and (max-width: 600px) {
+    .card {
+        font-size: 16px !important;
+        padding: 12px !important;
+        width: 160px !important;
+        height: 200px !important;
+    }
+}
 </style>
 """, unsafe_allow_html=True)
+
 
 index = st.session_state.get('index', -1)
 slides = st.session_state.get('slides', [])
@@ -101,6 +112,8 @@ if index == -1 and slides:
 
 # ------ Affichage de la carte ------
 if 0 <= index < len(slides):
+    st.markdown(f"### Score : 🟥 {st.session_state['scores']['Team 1']} – 🟦 {st.session_state['scores']['Team 2']}")
+
     carte = slides[index]
     st.markdown(f"""
     <div style="display: flex; justify-content: center; align-items: center; height: 350px;">
@@ -140,18 +153,10 @@ if 0 <= index < len(slides):
             st.session_state['index'] += 1
             st.rerun()
 
-    with action_col:
-        if st.button("🔄 Remplacer cette carte"):
-            nouvelle = remplacer_carte(cartes, slides, index, st.session_state.get("mise_de_cote", []))
-            if nouvelle:
-                st.session_state['slides'][index] = nouvelle
-                st.rerun()
-            else:
-                st.warning("Aucune autre carte disponible pour remplacement.")
-
         team1 = st.session_state['team_names']['Team 1']
         team2 = st.session_state['team_names']['Team 2']
-
+        
+    with action_col:
         if st.button(f"🏅 Envoyer à {team1}"):
             st.session_state['cartes_team1'].append(carte)
             st.session_state['last_team_action'] = ("Team 1", carte)
@@ -167,6 +172,27 @@ if 0 <= index < len(slides):
             st.session_state['index'] = min(index, len(st.session_state['slides']) - 1)
             st.session_state['scores']['Team 2'] += 1
             st.rerun()
+
+        if st.session_state.get("last_team_action"):
+            if st.button("↩️ Annuler la dernière attribution"):
+                team, last_card = st.session_state['last_team_action']
+                if team == "Team 1" and last_card in st.session_state['cartes_team1']:
+                    st.session_state['cartes_team1'].remove(last_card)
+                    st.session_state['scores']['Team 1'] -= 1
+                elif team == "Team 2" and last_card in st.session_state['cartes_team2']:
+                    st.session_state['cartes_team2'].remove(last_card)
+                    st.session_state['scores']['Team 2'] -= 1
+                st.session_state['slides'].insert(st.session_state['index'] + 1, last_card)
+                st.session_state['last_team_action'] = None
+                st.rerun()
+
+        if st.button("🔄 Remplacer cette carte"):
+            nouvelle = remplacer_carte(cartes, slides, index, st.session_state.get("mise_de_cote", []))
+            if nouvelle:
+                st.session_state['slides'][index] = nouvelle
+                st.rerun()
+            else:
+                st.warning("Aucune autre carte disponible pour remplacement.")
 
 # ------ Voir toutes les cartes ------
 toggle = st.button("🔽 Voir toutes les cartes" if not st.session_state['show_all_cards'] else "🔼 Masquer les cartes")
@@ -199,21 +225,7 @@ if st.session_state['cartes_team1'] or st.session_state['cartes_team2']:
         for carte in st.session_state['cartes_team2']:
             st.markdown(f"- {carte['carte']} ({carte['theme']})")
 
-    st.markdown(f"### Score : 🟥 {st.session_state['scores']['Team 1']} – 🟦 {st.session_state['scores']['Team 2']}")
-
-# ------ Annulation, réinitialisation, remélange ------
-if st.session_state.get("last_team_action"):
-    if st.button("↩️ Annuler la dernière attribution"):
-        team, last_card = st.session_state['last_team_action']
-        if team == "Team 1" and last_card in st.session_state['cartes_team1']:
-            st.session_state['cartes_team1'].remove(last_card)
-            st.session_state['scores']['Team 1'] -= 1
-        elif team == "Team 2" and last_card in st.session_state['cartes_team2']:
-            st.session_state['cartes_team2'].remove(last_card)
-            st.session_state['scores']['Team 2'] -= 1
-        st.session_state['slides'].insert(st.session_state['index'] + 1, last_card)
-        st.session_state['last_team_action'] = None
-        st.rerun()
+# ------ Réinitialisation, remélange ------
 
 st.sidebar.markdown("---")
 st.sidebar.subheader("🏷️ Noms des équipes")
@@ -230,7 +242,7 @@ if st.sidebar.button("🔄 Réinitialiser les scores"):
     st.session_state['scores'] = {"Team 1": 0, "Team 2": 0}
     st.success("Scores réinitialisés.")
 
-if st.sidebar.button("🔁 Remélanger les cartes gagnées"):
+if st.sidebar.button("🔁 Remélanger le tirage"):
     cartes_gagnees = st.session_state['cartes_team1'] + st.session_state['cartes_team2']
     if cartes_gagnees:
         random.shuffle(cartes_gagnees)
