@@ -15,7 +15,7 @@ if "page" not in st.session_state:
     st.session_state.page = "menu_principal"
 
 # Injecter le script de validation AdSense
-with open("c:/Users/lucas/Documents/pake/adsense.html", "r") as f:
+with open("c:/Users/lucas/Documents/pake/ads.html", "r") as f:
     adsense_head = f.read()
 
 components.html(
