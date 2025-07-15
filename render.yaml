@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: mon-app-streamlit
+    name: pake-de-cartes
     runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: streamlit run app.py --server.port=10000 --server.enableCORS=false
+    startCommand: streamlit run streamlit_app.py --server.port=10000 --server.enableCORS=false
     envVars:
       - key: PYTHON_VERSION
         value: 3.10

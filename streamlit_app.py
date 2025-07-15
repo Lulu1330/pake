@@ -2,6 +2,7 @@ import streamlit as st
 import random
 from utils import charger_cartes, tirer_cartes, remplacer_carte
 import sqlite3
+import streamlit.components.v1 as components
 
 #st.set_page_config(layout="wide")
 
@@ -15,6 +16,13 @@ if "page" not in st.session_state:
 
 # Navigation principale
 if st.session_state.page == "menu_principal":
+
+    # Insérer l'annonce AdSense
+    with open("adsense.html", "r") as f:
+        adsense_code = f.read()
+
+    components.html(adsense_code, height=100)
+
     st.title("Bienvenue sur Pake de Cartes 👋")
     st.markdown("Choisissez une section pour commencer :")
 
@@ -38,7 +46,23 @@ if st.session_state.page == "menu_principal":
 elif st.session_state.page == "confidentialite":
     st.title("Politique de confidentialité")
     st.markdown("""
-    Nous respectons votre vie privée...
+    Nous respectons votre vie privée et nous nous engageons à protéger les informations personnelles que vous nous fournissez. 
+
+    #### Collecte des données
+    Nous ne collectons aucune donnée personnelle sans votre consentement. Certaines données anonymes peuvent être recueillies automatiquement à des fins statistiques ou de performance (comme le type de navigateur, le système d’exploitation, l’adresse IP anonymisée, etc.).
+
+    #### Utilisation des données
+    Les données collectées sont utilisées uniquement pour améliorer votre expérience utilisateur. Aucune information n’est vendue, partagée ou transférée à des tiers sans votre accord préalable.
+
+    #### Cookies
+    Ce site peut utiliser des cookies pour optimiser la navigation et le contenu proposé. Vous pouvez configurer votre navigateur pour refuser les cookies.
+
+    #### Sécurité
+    Toutes les données sont protégées par des mesures de sécurité techniques et organisationnelles adaptées.
+
+    #### Vos droits
+    Vous disposez d’un droit d’accès, de modification et de suppression de vos données personnelles. Pour toute demande, veuillez nous contacter via l’adresse indiquée dans les mentions légales.
+
     """)
     if st.button("Retour"):
         st.session_state.page = "menu_principal"
@@ -46,7 +70,17 @@ elif st.session_state.page == "confidentialite":
 elif st.session_state.page == "apropos":
     st.title("À propos")
     st.markdown("""
-    Ce projet a été créé par passion...
+    Ce projet a été créé par passion dans le but de proposer un outil simple, accessible et utile à tous.
+
+    Développé avec [Streamlit](https://streamlit.io), cette application vise à offrir une expérience fluide et interactive. Elle reflète une volonté de partager des connaissances, d’explorer de nouvelles technologies et de répondre à des besoins concrets.
+
+    #### Objectifs :
+    - Rendre l'information accessible de manière intuitive
+    - Offrir un outil évolutif et communautaire
+    - Encourager l’apprentissage et l’innovation
+
+    N'hésitez pas à nous faire part de vos retours ou suggestions pour améliorer le projet !
+
     """)
     if st.button("Retour"):
         st.session_state.page = "menu_principal"
@@ -54,7 +88,20 @@ elif st.session_state.page == "apropos":
 elif st.session_state.page == "mentions":
     st.title("Mentions légales")
     st.markdown("""
-    Ce site est édité par Lulu1330...
+    #### Éditeur du site
+    Ce site est édité par **Lucas B.**, créateur du projet.
+
+    **Contact :** support@pake-de-cartes.fr
+
+    #### Hébergement
+    Ce site est hébergé par **Streamlit Cloud** ou une autre plateforme compatible avec les apps Python.
+
+    #### Propriété intellectuelle
+    Le contenu de ce site (textes, images, code, etc.) est protégé par le droit d’auteur. Toute reproduction ou utilisation sans autorisation préalable est interdite.
+
+    #### Responsabilité
+    L’éditeur ne saurait être tenu responsable en cas de dommage direct ou indirect lié à l’utilisation du site ou à un dysfonctionnement technique.
+
     """)
     if st.button("Retour"):
         st.session_state.page = "menu_principal"
@@ -86,6 +133,7 @@ elif st.session_state.page == "cartes":
                 <div style='font-size: 64px;'>⬅️</div>
                 <p style='font-size: 20px; font-weight: bold;'>Choisissez vos options de tirage dans le menu à gauche</p>
                 <p style='color: grey;'>Thèmes, nombre de cartes, noms d’équipes…</p>
+                <p style='color: grey;'>"Score et Actions" pour garder les mêmes cartes</p>
             </div>
         """, unsafe_allow_html=True)
 
