@@ -14,14 +14,22 @@ st.set_page_config(page_title="Pake de Cartes", layout="centered")
 if "page" not in st.session_state:
     st.session_state.page = "menu_principal"
 
+# Injecter le script de validation AdSense
+with open("c:/Users/lucas/Documents/pake/adsense.html", "r") as f:
+    adsense_head = f.read()
+
+components.html(
+    f"""
+    <html>
+      <head>{adsense_head}</head>
+      <body></body>
+    </html>
+    """,
+    height=0,  # Invisible, juste pour le head
+)
+
 # Navigation principale
 if st.session_state.page == "menu_principal":
-
-    # Insérer l'annonce AdSense
-    with open("adsense.html", "r") as f:
-        adsense_code = f.read()
-
-    components.html(adsense_code, height=100)
 
     st.title("Bienvenue sur Pake de Cartes 👋")
     st.markdown("Choisissez une section pour commencer :")
