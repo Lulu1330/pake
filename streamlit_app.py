@@ -253,7 +253,7 @@ elif st.session_state.page == "cartes":
 
         st.markdown(f"""
         <div class='card-container'>
-            <div class='card' style='--card-color: {carte['couleur']}'>
+            <div class='card' style='--card-color: black'>
                 {carte['carte']}
             </div>
         </div>
