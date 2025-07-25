@@ -115,7 +115,6 @@ export default function CardDisplay({
             <button
               key={i}
               onClick={() => {onAttribuer(i);
-                onNext();
               }}
               style={{
                 backgroundColor: "#7c3aed",
