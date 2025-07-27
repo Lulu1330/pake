@@ -2,29 +2,31 @@ import React from "react";
 
 export default function PolitiqueConfidentialite() {
   return (
-    <div>
-      <h2>Politique de confidentialité</h2>
-      <p>    Nous respectons votre vie privée et nous nous engageons à protéger les informations personnelles que vous nous fournissez. </p>
-      <p> Collecte des données :</p>
-      <p> Nous ne collectons aucune donnée personnelle sans votre consentement. Certaines données anonymes peuvent être recueillies 
-        automatiquement à des fins statistiques ou de performance (comme le type de navigateur, le système d’exploitation, 
-        l’adresse IP anonymisée, etc.).</p>
+    <div className="max-w-3xl mx-auto p-6 text-left font-sans text-gray-800">
+      <h1 className="text-4xl font-extrabold text-indigo-600 mb-6">🔐 Politique de Confidentialité</h1>
 
-    <p> Utilisation des données : </p>
-    <p> Les données collectées sont utilisées uniquement pour améliorer votre expérience utilisateur. 
-      Aucune information n’est vendue, partagée ou transférée à des tiers sans votre accord préalable.</p>
+      <section className="mb-6">
+        <p>
+          Ce site respecte votre vie privée. Aucune donnée personnelle n’est collectée sans votre consentement.
+        </p>
+      </section>
 
-    <p> Cookies : </p>
-    <p> Ce site peut utiliser des cookies pour optimiser la navigation et le contenu proposé. 
-      Vous pouvez configurer votre navigateur pour refuser les cookies. </p>
+      <section className="mb-6">
+        <h2 className="text-xl font-bold mb-2">Données personnelles</h2>
+        <p>
+          Aucune donnée personnelle (nom, email, adresse IP…) n’est enregistrée, stockée ou partagée.
+        </p>
+      </section>
 
-    <p> Sécurité </p>
-    <p> Toutes les données sont protégées par des mesures de sécurité techniques et organisationnelles adaptées. </p>
-
-    <p> Vos droits</p>
-    <p> Vous disposez d’un droit d’accès, de modification et de suppression de vos données personnelles. 
-      Pour toute demande, veuillez nous contacter via l’adresse indiquée dans les mentions légales. </p>
-
+      <section>
+        <h2 className="text-xl font-bold mb-2">Contact</h2>
+        <p>
+          Pour toute question relative à la confidentialité, vous pouvez nous écrire à :{" "}
+          <a href="mailto:support@pake-de-cartes.fr" className="text-indigo-600 underline">
+            support@pake-de-cartes.fr
+          </a>
+        </p>
+      </section>
     </div>
   );
 }

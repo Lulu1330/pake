@@ -9,14 +9,12 @@ export default function Home() {
   const [current, setCurrent] = useState(0);
   const [points, setPoints] = useState({});
   const [erreur, setErreur] = useState("");
-
   const [config, setConfig] = useState({
     nbCartes: 5,
     nbEquipes: 2,
     selectedThemes: ["Animaux", "Objets"],
     chrono: 60,
   });
-
   const [equipes, setEquipes] = useState(["Équipe 1", "Équipe 2"]);
   const [scoreEquipes, setScoreEquipes] = useState({});
   const [timeLeft, setTimeLeft] = useState(config.chrono);
@@ -68,7 +66,6 @@ export default function Home() {
       setCartes(data);
       setCurrent(0);
       setPoints({});
-      setScoreEquipes({});
       setErreur("");
       setShowFirstCard(false);
     } catch {
@@ -80,7 +77,6 @@ export default function Home() {
     const shuffled = [...cartes].sort(() => Math.random() - 0.5);
     setCartes(shuffled);
     setCurrent(0);
-    setPoints({});
     setShowFirstCard(false);
   };
 
@@ -88,11 +84,11 @@ export default function Home() {
     setCartes([]);
     setCurrent(0);
     setPoints({});
-    setScoreEquipes({});
     setErreur("");
     setIsRunning(false);
     setTimeLeft(config.chrono);
     setConfig((prev) => ({ ...prev, selectedThemes: [] }));
+    setShowFirstCard(false);
   };
 
   const handleAttribution = (equipeIndex) => {
@@ -120,43 +116,55 @@ export default function Home() {
     });
   };
 
-  const totalPoints = Object.values(points).filter(Boolean).length;
+  const totalPoints = Object.values(points).filter((v) => v !== undefined).length;
 
   return (
-    <div className="max-w-4xl mx-auto p-6 text-center font-sans">
-      <h1 className="text-4xl font-extrabold mb-6 text-indigo-600">🎴 Jeu de Cartes</h1>
+    <div className="min-h-screen bg-gray-50 py-8 px-4 font-sans">
+      <div className="max-w-5xl mx-auto">
+        <h1 className="text-4xl font-extrabold mb-6 text-indigo-600 text-center">🎴 Jeu de Cartes</h1>
 
-      <ThemeSelector
-        allThemes={allThemes}
-        selectedThemes={config.selectedThemes}
-        setSelectedThemes={(themes) => handleConfigChange("selectedThemes", themes)}
-        toggleSelectAll={toggleSelectAll}
-        allSelected={allSelected}
-      />
+        <ThemeSelector
+          allThemes={allThemes}
+          selectedThemes={config.selectedThemes}
+          setSelectedThemes={(themes) => handleConfigChange("selectedThemes", themes)}
+          toggleSelectAll={toggleSelectAll}
+          allSelected={allSelected}
+        />
 
-      <div className="my-4 space-y-4">
-        <label>
-          Nombre de cartes :
-          <input
-            type="number"
-            value={config.nbCartes}
-            onChange={(e) => handleConfigChange("nbCartes", parseInt(e.target.value))}
-            className="border rounded px-3 py-1 ml-2 w-20 text-center"
-          />
-        </label>
+        <div className="my-6 grid sm:grid-cols-2 gap-4">
+          <label className="block">
+            <span className="font-medium">Nombre de cartes</span>
+            <input
+              type="number"
+              value={config.nbCartes}
+              onChange={(e) => handleConfigChange("nbCartes", parseInt(e.target.value))}
+              className="mt-1 border rounded px-3 py-1 w-full"
+            />
+          </label>
 
-        <label>
-          Nombre d'équipes :
-          <input
-            type="number"
-            min={1}
-            value={config.nbEquipes}
-            onChange={(e) => handleConfigChange("nbEquipes", parseInt(e.target.value))}
-            className="border rounded px-3 py-1 ml-2 w-20 text-center"
-          />
-        </label>
+          <label className="block">
+            <span className="font-medium">Nombre d'équipes</span>
+            <input
+              type="number"
+              min={1}
+              value={config.nbEquipes}
+              onChange={(e) => handleConfigChange("nbEquipes", parseInt(e.target.value))}
+              className="mt-1 border rounded px-3 py-1 w-full"
+            />
+          </label>
 
-        <div className="grid grid-cols-2 gap-2">
+          <label className="block">
+            <span className="font-medium">⏱️ Chrono (sec)</span>
+            <input
+              type="number"
+              value={config.chrono}
+              onChange={(e) => handleConfigChange("chrono", parseInt(e.target.value))}
+              className="mt-1 border rounded px-3 py-1 w-full"
+            />
+          </label>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 my-4">
           {equipes.map((nom, i) => (
             <input
               key={i}
@@ -172,79 +180,67 @@ export default function Home() {
           ))}
         </div>
 
-        <label>
-          ⏱️ Chrono (sec) :
-          <input
-            type="number"
-            value={config.chrono}
-            onChange={(e) => handleConfigChange("chrono", parseInt(e.target.value))}
-            className="border rounded px-2 py-1 ml-2 w-24 text-center"
-          />
-        </label>
-
-        <div className="flex gap-4 justify-center mt-2">
-          <button onClick={() => setIsRunning(true)} className="bg-green-500 text-white px-3 py-1 rounded shadow">▶️ Démarrer</button>
-          <button onClick={() => setIsRunning(false)} className="bg-yellow-500 text-white px-3 py-1 rounded shadow">⏸️ Pause</button>
-          <button onClick={() => { setIsRunning(false); setTimeLeft(config.chrono); }} className="bg-red-500 text-white px-3 py-1 rounded shadow">🔄 Reset</button>
+        <div className="flex flex-wrap gap-4 justify-center mt-4">
+          <button onClick={() => setIsRunning(true)} className="btn bg-green-500">▶️ Démarrer</button>
+          <button onClick={() => setIsRunning(false)} className="btn bg-yellow-500">⏸️ Pause</button>
+          <button onClick={() => { setIsRunning(false); setTimeLeft(config.chrono); }} className="btn bg-red-500">🔄 Reset</button>
         </div>
 
-        <p className={`mt-2 text-xl font-mono ${timeLeft === 0 ? "text-red-600 animate-pulse font-extrabold" : ""}`}>
+        <p className={`mt-4 text-center text-2xl ${timeLeft === 0 ? "text-red-600 animate-pulse font-extrabold" : "text-gray-700"}`}>
           {timeLeft === 0 ? "⏰ Temps écoulé !" : `${timeLeft} sec restantes`}
         </p>
-      </div>
 
-      <div className="my-6 flex gap-4 justify-center flex-wrap">
-        <button onClick={fetchCartes} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow">🎲 Tirer les cartes</button>
-        {cartes.length > 0 && (
-          <>
-            <button onClick={reshuffleCards} className="bg-green-600 text-white px-4 py-2 rounded shadow">🔁 Relancer</button>
-            <button onClick={resetGame} className="bg-gray-600 text-white px-4 py-2 rounded shadow">♻️ Réinitialiser</button>
-          </>
-        )}
-      </div>
-
-      <h2 className="text-xl font-semibold mb-2 text-gray-700">
-        Score total : {totalPoints} point{totalPoints !== 1 ? "s" : ""}
-      </h2>
-
-      <div className="my-4">
-        <h3 className="font-semibold text-lg mb-2 text-purple-600">🏆 Scores par équipe :</h3>
-        <ul className="grid grid-cols-2 gap-2">
-          {equipes.map((eq, i) => (
-            <li key={i} className="bg-purple-100 rounded px-3 py-2">
-              {eq} : {scoreEquipes[i] || 0} point{(scoreEquipes[i] || 0) > 1 ? "s" : ""}
-            </li>
-          ))}
-        </ul>
-      </div>
-      {cartes.length > 0 && (
-        <div className="mt-8">
-          {!showFirstCard ? (
-            <button
-              onClick={() => setShowFirstCard(true)}
-              className="bg-indigo-600 text-white px-6 py-3 rounded shadow text-lg"
-            >
-              ▶️ Commencer
-            </button>
-          ) : (
-            <CardDisplay
-              carte={cartes[current]}
-              index={current}
-              total={cartes.length}
-              isValidated={points[current] !== undefined}
-              onNext={() => setCurrent((prev) => (prev + 1) % cartes.length)}
-              onPrev={() => setCurrent((prev) => (prev - 1 + cartes.length) % cartes.length)}
-              equipes={equipes}
-              onAttribuer={(index) => {
-                handleAttribution(index);
-                setCurrent((prev) => (prev + 1) % cartes.length);
-              }}
-              onAnnuler={handleAnnulation}
-            />
+        <div className="mt-6 flex flex-wrap justify-center gap-4">
+          <button onClick={fetchCartes} className="btn bg-blue-600">🎲 Tirer les cartes</button>
+          {cartes.length > 0 && (
+            <>
+              <button onClick={reshuffleCards} className="btn bg-green-600">🔁 Relancer</button>
+              <button onClick={resetGame} className="btn bg-gray-600">♻️ Réinitialiser</button>
+            </>
           )}
         </div>
-      )}
-      {erreur && <p className="text-red-600 mt-4">{erreur}</p>}
+
+        <div className="mt-6 text-center">
+          <h2 className="text-xl font-bold text-purple-700">🏆 Scores par équipe</h2>
+          <ul className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2">
+            {equipes.map((eq, i) => (
+              <li key={i} className="bg-purple-100 rounded px-3 py-2">
+                {eq} : {scoreEquipes[i] || 0} point{(scoreEquipes[i] || 0) > 1 ? "s" : ""}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {cartes.length > 0 && (
+          <div className="mt-8">
+            {!showFirstCard ? (
+              <button
+                onClick={() => setShowFirstCard(true)}
+                className="btn bg-indigo-600 text-xl"
+              >
+                ▶️ Commencer
+              </button>
+            ) : (
+              <CardDisplay
+                carte={cartes[current]}
+                index={current}
+                total={cartes.length}
+                isValidated={points[current] !== undefined}
+                onNext={() => setCurrent((prev) => (prev + 1) % cartes.length)}
+                onPrev={() => setCurrent((prev) => (prev - 1 + cartes.length) % cartes.length)}
+                equipes={equipes}
+                onAttribuer={(index) => {
+                  handleAttribution(index);
+                  setCurrent((prev) => (prev + 1) % cartes.length);
+                }}
+                onAnnuler={handleAnnulation}
+              />
+            )}
+          </div>
+        )}
+
+        {erreur && <p className="text-red-600 mt-4 text-center">{erreur}</p>}
+      </div>
     </div>
   );
 }

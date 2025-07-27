@@ -2,23 +2,33 @@ import React from "react";
 
 export default function MentionsLegales() {
   return (
-    <div>
-      <h2>Mentions légales</h2>
-      <p> Éditeur du site </p>
-    <p>Ce site est édité par Lucas B., créateur du projet.</p>
+    <div className="max-w-3xl mx-auto p-6 text-left font-sans text-gray-800">
+      <h1 className="text-4xl font-extrabold text-indigo-600 mb-6">📄 Mentions Légales</h1>
 
-    <p>Contact : support@pake-de-cartes.fr</p>
+      <section className="mb-6">
+        <h2 className="text-xl font-bold mb-2">Éditeur du site</h2>
+        <p>
+          Ce site est édité à titre personnel et n’a pas vocation commerciale.
+          Pour toute question, vous pouvez contacter l’éditeur à :{" "}
+          <a href="support@pake-de-cartes.fr" className="text-indigo-600 underline">
+            support@pake-de-cartes.fr
+          </a>
+        </p>
+      </section>
 
-    <p>Hébergement</p>
-    <p>Ce site est hébergé par **Streamlit Cloud** ou une autre plateforme compatible avec les apps Python.</p>
+      <section className="mb-6">
+        <h2 className="text-xl font-bold mb-2">Propriété intellectuelle</h2>
+        <p>
+          Tous les éléments de ce site (textes, images, interface) sont protégés par le droit d’auteur. Toute reproduction partielle ou totale est interdite sans autorisation.
+        </p>
+      </section>
 
-    <p>Propriété intellectuelle</p>
-    <p>Le contenu de ce site (textes, images, code, etc.) est protégé par le droit d’auteur. 
-      Toute reproduction ou utilisation sans autorisation préalable est interdite.</p>
-
-    <p>Responsabilité</p>
-    <p>L’éditeur ne saurait être tenu responsable en cas de dommage direct ou indirect lié à l’utilisation du site ou à un dysfonctionnement
-       technique.</p>
+      <section>
+        <h2 className="text-xl font-bold mb-2">Responsabilité</h2>
+        <p>
+          L’éditeur ne saurait être tenu responsable d’éventuels dysfonctionnements ou erreurs liées à l’utilisation de l’application.
+        </p>
+      </section>
     </div>
   );
 }
