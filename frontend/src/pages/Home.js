@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import CardDisplay from "../components/CardDisplay";
 import ThemeSelector from "../components/ThemeSelector";
 import { allThemes } from "../components/Constants";
+import axios from 'axios';
 
 export default function Home() {
   const [showFirstCard, setShowFirstCard] = useState(false);
@@ -67,22 +68,20 @@ export default function Home() {
 
   const fetchCartes = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:5000/tirage", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          themes: config.selectedThemes,
-          nb_cartes: config.nbCartes,
-        }),
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/tirage`, {
+        themes: config.selectedThemes,
+        nb_cartes: config.nbCartes,
       });
-      if (!res.ok) throw new Error();
-      const data = await res.json();
+
+      const data = response.data;
+
       setCartes(data);
       setCurrent(0);
       setPoints({});
       setErreur("");
       setShowFirstCard(false);
-    } catch {
+    } catch (error) {
+      console.error(error);
       setErreur("Erreur lors du tirage. Vérifie le backend.");
     }
   };
@@ -129,7 +128,7 @@ export default function Home() {
       return copy;
     });
   };
-
+  
   const totalPoints = Object.values(points).filter((v) => v !== undefined).length;
 
   return (
