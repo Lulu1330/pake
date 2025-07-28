@@ -39,6 +39,20 @@ export default function Home() {
     }
   }, [isRunning, timeLeft]);
 
+  const handleCheckboxChange = (theme) => {
+    setConfig((prev) => {
+      const selected = prev.selectedThemes;
+      const isSelected = selected.includes(theme);
+
+      return {
+        ...prev,
+        selectedThemes: isSelected
+          ? selected.filter((t) => t !== theme) // ✅ retire le thème
+          : [...selected, theme],              // ✅ ajoute le thème
+      };
+    });
+  };
+
   const handleConfigChange = (field, value) => {
     setConfig((prev) => ({ ...prev, [field]: value }));
     if (field === "chrono") setTimeLeft(value);
@@ -128,6 +142,7 @@ export default function Home() {
           selectedThemes={config.selectedThemes}
           setSelectedThemes={(themes) => handleConfigChange("selectedThemes", themes)}
           toggleSelectAll={toggleSelectAll}
+          handleCheckboxChange={handleCheckboxChange}
           allSelected={allSelected}
         />
 
