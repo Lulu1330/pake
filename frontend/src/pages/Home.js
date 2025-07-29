@@ -67,12 +67,12 @@ export default function Home() {
 
   const fetchCartes = async () => {
     try {
-      const res = await fetch("https://https://pake-071c.onrender.com//tirage", {
+      const res = await fetch("https://pake-ke5g.onrender.com/tirage", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          themes: config.selectedThemes,
-          nb_cartes: config.nbCartes,
+          themes,
+          nb_cartes
         }),
       });
       if (!res.ok) throw new Error();
