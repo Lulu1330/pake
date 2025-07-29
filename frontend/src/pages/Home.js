@@ -71,8 +71,8 @@ export default function Home() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          themes,
-          nb_cartes
+          themes: config.selectedThemes,
+          nb_cartes: config.nbCartes,
         }),
       });
       if (!res.ok) throw new Error();
@@ -225,19 +225,28 @@ export default function Home() {
         </ul>
       </div>
 
-      {cartes.length > 0 && current !== null && current < cartes.length && (
+      {cartes.length > 0 && (
         <div className="mt-8">
-          <CardDisplay
-            carte={cartes[current]}
-            index={current}
-            total={cartes.length}
-            isValidated={points[current] != null}
-            onNext={() => setCurrent((prev) => (prev + 1 < cartes.length ? prev + 1 : prev))}
-            onPrev={() => setCurrent((prev) => (prev - 1 >= 0 ? prev - 1 : prev))}
-            equipes={equipes}
-            onAttribuer={handleAttribution}
-            onAnnuler={annulerAttribution}
-          />
+          {current === null ? (
+            <button
+              onClick={() => setCurrent(0)}
+              className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded shadow text-xl"
+            >
+              🔄 Retourner la carte
+            </button>
+          ) : (
+            <CardDisplay
+              carte={cartes[current]}
+              index={current}
+              total={cartes.length}
+              isValidated={points[current] != null}
+              onNext={() => setCurrent((prev) => (prev + 1 < cartes.length ? prev + 1 : prev))}
+              onPrev={() => setCurrent((prev) => (prev - 1 >= 0 ? prev - 1 : prev))}
+              equipes={equipes}
+              onAttribuer={handleAttribution}
+              onAnnuler={annulerAttribution}
+            />
+          )}
         </div>
       )}
 
