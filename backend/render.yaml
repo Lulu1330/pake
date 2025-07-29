@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: pake-de-cartes-backend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    runtime: python
+    region: frankfurt
+    branch: main
+    rootDir: backend
+    autoDeploy: true
