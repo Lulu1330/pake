@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import CardDisplay from "../components/CardDisplay";
 import ThemeSelector from "../components/ThemeSelector";
 import { allThemes } from "../components/Constants";
-import axios from 'axios';
+import axios from "axios";
 
 export default function Home() {
   const [showFirstCard, setShowFirstCard] = useState(false);
@@ -23,12 +23,18 @@ export default function Home() {
 
   const allSelected = config.selectedThemes.length === allThemes.length;
 
+  // Met à jour les noms d'équipe et les scores si le nombre change
   useEffect(() => {
-    setEquipes((prev) =>
-      Array.from({ length: config.nbEquipes }, (_, i) => prev[i] || `Équipe ${i + 1}`)
-    );
+    const newEquipes = Array.from({ length: config.nbEquipes }, (_, i) => equipes[i] || `Équipe ${i + 1}`);
+    const newScores = {};
+    newEquipes.forEach((_, i) => {
+      newScores[i] = scoreEquipes[i] || 0;
+    });
+    setEquipes(newEquipes);
+    setScoreEquipes(newScores);
   }, [config.nbEquipes]);
 
+  // Gère le chrono
   useEffect(() => {
     if (isRunning && timeLeft > 0) {
       const timer = setTimeout(() => setTimeLeft((t) => t - 1), 1000);
@@ -44,12 +50,9 @@ export default function Home() {
     setConfig((prev) => {
       const selected = prev.selectedThemes;
       const isSelected = selected.includes(theme);
-
       return {
         ...prev,
-        selectedThemes: isSelected
-          ? selected.filter((t) => t !== theme) // ✅ retire le thème
-          : [...selected, theme],              // ✅ ajoute le thème
+        selectedThemes: isSelected ? selected.filter((t) => t !== theme) : [...selected, theme],
       };
     });
   };
@@ -73,9 +76,7 @@ export default function Home() {
         nb_cartes: config.nbCartes,
       });
 
-      const data = response.data;
-
-      setCartes(data);
+      setCartes(response.data);
       setCurrent(0);
       setPoints({});
       setErreur("");
@@ -128,7 +129,7 @@ export default function Home() {
       return copy;
     });
   };
-  
+
   const totalPoints = Object.values(points).filter((v) => v !== undefined).length;
 
   return (
@@ -150,8 +151,9 @@ export default function Home() {
             <span className="font-medium">Nombre de cartes</span>
             <input
               type="number"
+              min={1}
               value={config.nbCartes}
-              onChange={(e) => handleConfigChange("nbCartes", parseInt(e.target.value))}
+              onChange={(e) => handleConfigChange("nbCartes", parseInt(e.target.value, 10) || 1)}
               className="mt-1 border rounded px-3 py-1 w-full"
             />
           </label>
@@ -162,7 +164,7 @@ export default function Home() {
               type="number"
               min={1}
               value={config.nbEquipes}
-              onChange={(e) => handleConfigChange("nbEquipes", parseInt(e.target.value))}
+              onChange={(e) => handleConfigChange("nbEquipes", parseInt(e.target.value, 10) || 1)}
               className="mt-1 border rounded px-3 py-1 w-full"
             />
           </label>
@@ -171,8 +173,9 @@ export default function Home() {
             <span className="font-medium">⏱️ Chrono (sec)</span>
             <input
               type="number"
+              min={1}
               value={config.chrono}
-              onChange={(e) => handleConfigChange("chrono", parseInt(e.target.value))}
+              onChange={(e) => handleConfigChange("chrono", parseInt(e.target.value, 10) || 1)}
               className="mt-1 border rounded px-3 py-1 w-full"
             />
           </label>
