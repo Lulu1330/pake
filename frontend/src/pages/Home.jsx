@@ -29,6 +29,8 @@ export default function Home({ darkMode, setDarkMode }) {
 
   const allSelected = config.selectedThemes.length === allThemes.length;
 
+  const [direction, setDirection] = useState(1);
+
   // ⏱️ Gestion du timer
   useEffect(() => {
     if (isRunning && timeLeft > 0) {
@@ -264,9 +266,9 @@ export default function Home({ darkMode, setDarkMode }) {
             {current !== null && (
               <motion.div
                 key={current}
-                initial={{ x: 100, opacity: 0 }}
+                initial={{ x: direction*100, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -100, opacity: 0 }}
+                exit={{ x: direction*-100, opacity: 0 }}
                 transition={{ duration: 0.4 }}
               >
                 <CardDisplay
@@ -274,8 +276,14 @@ export default function Home({ darkMode, setDarkMode }) {
                   index={current}
                   total={cartes.length}
                   isValidated={points[current] != null}
-                  onNext={() => setCurrent((prev) => (prev + 1 < cartes.length ? prev + 1 : 0))}
-                  onPrev={() => setCurrent((prev) => (prev - 1 >= 0 ? prev - 1 : cartes.length - 1))}
+                  onNext={() => {
+                    setDirection(1);
+                    setCurrent((prev) => (prev + 1 < cartes.length ? prev + 1 : 0));
+                  }}
+                  onPrev={() => {
+                    setDirection(-1);
+                    setCurrent((prev) => (prev - 1 >= 0 ? prev - 1 : cartes.length - 1));
+                  }}
                   equipes={equipes}
                   onAttribuer={handleAttribution}
                   onAnnuler={annulerAttribution}
