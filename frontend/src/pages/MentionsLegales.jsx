@@ -2,8 +2,8 @@ import React from "react";
 
 export default function MentionsLegales() {
   return (
-    <div className="max-w-3xl mx-auto p-6 text-left font-sans text-gray-800">
-      <h1 className="text-4xl font-extrabold text-indigo-600 mb-6">📄 Mentions Légales</h1>
+    <div className="max-w-3xl mx-auto p-6 text-left font-sans text-gray-800 dark:text-gray-300">
+      <h1 className="text-4xl font-extrabold text-indigo-600 mb-6 dark:text-white">📄 Mentions Légales</h1>
 
       <section className="mb-6">
         <h2 className="text-xl font-bold mb-2">Éditeur du site</h2>

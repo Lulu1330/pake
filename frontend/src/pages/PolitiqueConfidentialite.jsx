@@ -2,8 +2,8 @@ import React from "react";
 
 export default function PolitiqueConfidentialite() {
   return (
-    <div className="max-w-3xl mx-auto p-6 text-left font-sans text-gray-800">
-      <h1 className="text-4xl font-extrabold text-indigo-600 mb-6">🔐 Politique de Confidentialité</h1>
+    <div className="max-w-3xl mx-auto p-6 text-left font-sans text-gray-800 dark:text-gray-300">
+      <h1 className="text-4xl font-extrabold text-indigo-600 mb-6 dark:text-white">🔐 Politique de Confidentialité</h1>
 
       <section className="mb-6">
         <p>

@@ -42,3 +42,28 @@ code {
 .btn-gray {
   @apply bg-gray-400 dark:bg-gray-600;
 }
+.btn-outline {
+  @apply border border-gray-400 text-gray-700 hover:bg-gray-100 dark:text-white dark:border-gray-500 dark:hover:bg-gray-700;
+}
+
+.btn-small {
+  @apply text-xs px-3 py-1.5;
+}
+
+.btn-lg {
+  @apply text-base px-6 py-3;
+}
+/* === Champs stylisés === */
+.input {
+  @apply border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:bg-gray-800 dark:text-white;
+}
+
+/* === Label === */
+.label {
+  @apply font-medium text-gray-700 dark:text-gray-300 mb-1;
+}
+
+/* === Groupe de champ === */
+.form-group {
+  @apply mb-4 flex flex-col;
+}

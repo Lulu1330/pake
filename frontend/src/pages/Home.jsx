@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import CardDisplay from "../components/CardDisplay";
 import ThemeSelector from "../components/ThemeSelector";
 import { allThemes, equipeColors } from "../components/Constants";
+import ParametresPartie from "../components/ParametresPartie.jsx";
 import "../index.css";
 
 export default function Home({ darkMode, setDarkMode }) {
+  // États principaux
   const [cartes, setCartes] = useState([]);
   const [current, setCurrent] = useState(null);
   const [points, setPoints] = useState({});
@@ -22,11 +25,11 @@ export default function Home({ darkMode, setDarkMode }) {
   const [scoreEquipes, setScoreEquipes] = useState({});
   const [timeLeft, setTimeLeft] = useState(config.chrono);
   const [isRunning, setIsRunning] = useState(false);
-
-  const allSelected = config.selectedThemes.length === allThemes.length;
-  const totalPoints = Object.keys(points).length;
   const [isLoading, setIsLoading] = useState(false);
 
+  const allSelected = config.selectedThemes.length === allThemes.length;
+
+  // ⏱️ Gestion du timer
   useEffect(() => {
     if (isRunning && timeLeft > 0) {
       const timer = setTimeout(() => setTimeLeft((t) => t - 1), 1000);
@@ -38,24 +41,23 @@ export default function Home({ darkMode, setDarkMode }) {
     }
   }, [isRunning, timeLeft]);
 
+  // 🎨 Mode sombre
   useEffect(() => {
-      document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
-    }, [darkMode]);
+    document.documentElement.setAttribute("data-theme", darkMode ? "dark" : "light");
+  }, [darkMode]);
 
-    useEffect(() => {
+  // 👥 Gestion des équipes dynamiques
+  useEffect(() => {
     setEquipes((prev) => {
       const nouvellesEquipes = [...prev];
-
-      // Ajouter des équipes si besoin
       while (nouvellesEquipes.length < config.nbEquipes) {
         nouvellesEquipes.push(`Équipe ${nouvellesEquipes.length + 1}`);
       }
-
-      // Supprimer les équipes en trop
       return nouvellesEquipes.slice(0, config.nbEquipes);
     });
   }, [config.nbEquipes]);
 
+  // 🧠 Handlers
   const handleInputChange = (field, value) => {
     setConfig((prev) => ({ ...prev, [field]: value }));
     if (field === "chrono") setTimeLeft(value);
@@ -143,23 +145,12 @@ export default function Home({ darkMode, setDarkMode }) {
   };
 
   return (
-  <div className="w-full h-screen overflow-x-hidden bg-[#fdfdfd] dark:bg-gray-900 text-[#222] dark:text-gray-100 transition-colors duration-300">
-    <div className="w-full h-full flex flex-col p-4 sm:p-6 overflow-auto">
-        
-        {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-indigo-600 dark:text-indigo-300">🎴 Jeu de Cartes</h1>
-          <button
-            onClick={() => setDarkMode(!darkMode)}
-            className="px-3 py-1 bg-slate-200 dark:bg-gray-700 text-[#222] dark:text-white rounded shadow hover:scale-105 transition"
-          >
-            {darkMode ? "☀️ Mode clair" : "🌙 Mode sombre"}
-          </button>
-        </div>
+    <div className="w-full h-screen overflow-x-hidden bg-[#fdfdfd] dark:bg-gray-900 text-[#222] dark:text-gray-100 transition-colors duration-300">
+      <div className="w-full h-full flex flex-col p-4 sm:p-6 overflow-auto space-y-6">
 
-        {/* CONFIGURATION */}
+        {/* CONFIG */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 space-y-4">
-          <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200">Configuration</h2>
+          <h2 className="text-xl font-semibold">Configuration</h2>
 
           <ThemeSelector
             allThemes={allThemes}
@@ -211,7 +202,7 @@ export default function Home({ darkMode, setDarkMode }) {
             <button onClick={() => { setIsRunning(false); setTimeLeft(config.chrono); }} className="btn btn-rose">🔄 Reset</button>
           </div>
 
-          <p className={`mt-2 text-xl font-mono text-center ${timeLeft === 0 ? "text-red-600 dark:text-red-400 animate-pulse font-extrabold" : ""}`}>
+          <p className={`mt-2 text-xl font-mono text-center transition duration-300 ${timeLeft === 0 ? "text-red-600 dark:text-red-400 animate-pulse font-extrabold" : ""}`}>
             {timeLeft === 0 ? "⏰ Temps écoulé !" : `${timeLeft} sec restantes`}
           </p>
         </div>
@@ -226,20 +217,20 @@ export default function Home({ darkMode, setDarkMode }) {
             </>
           )}
         </div>
+
+        {/* LOADING */}
         {isLoading && (
           <p className="text-center text-blue-600 dark:text-blue-300 font-semibold my-4 animate-pulse">
-            ⏳ Chargement des cartes en cours...
+            ⏳ Chargement des cartes...
           </p>
         )}
+
         {/* SCORES */}
         <div className="bg-purple-100 dark:bg-purple-900 rounded p-4 shadow">
-          <h3 className="text-lg font-semibold mb-2 text-purple-700 dark:text-purple-200">🏆 Scores par équipe</h3>
+          <h3 className="text-lg font-semibold mb-2 text-purple-700 dark:text-purple-200">🏆 Scores</h3>
           <div className="grid grid-cols-2 gap-4">
             {equipes.map((eq, i) => (
-              <div
-                key={i}
-                className={`p-3 rounded text-center font-semibold ${equipeColors[i % equipeColors.length]}`}
-              >
+              <div key={i} className={`p-3 rounded text-center font-semibold ${equipeColors[i % equipeColors.length]}`}>
                 {eq} : {scoreEquipes[i] || 0} point{(scoreEquipes[i] || 0) > 1 ? "s" : ""}
               </div>
             ))}
@@ -247,35 +238,52 @@ export default function Home({ darkMode, setDarkMode }) {
         </div>
 
         {/* CARTES */}
-        {cartes.length > 0 && (
-          <div className="mt-8">
-            {current === null ? (
-              <div className="card-flip-container" onClick={() => {
-                setFlipped(true);
-                setTimeout(() => {
-                  setCurrent(0);
-                  setFlipped(false);
-                }, 700);
-              }}>
+        <div className="mt-6">
+          <AnimatePresence>
+            {cartes.length > 0 && current === null && (
+              <motion.div
+                className="card-flip-container cursor-pointer"
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+                onClick={() => {
+                  setFlipped(true);
+                  setTimeout(() => {
+                    setCurrent(0);
+                    setFlipped(false);
+                  }, 700);
+                }}
+              >
                 <div className={`card-flip-inner ${flipped ? "flipped" : ""}`}>
                   <div className="card-front">Clique pour retourner</div>
                 </div>
-              </div>
-            ) : (
-              <CardDisplay
-                carte={cartes[current]}
-                index={current}
-                total={cartes.length}
-                isValidated={points[current] != null}
-                onNext={() => setCurrent((prev) => (prev + 1 < cartes.length ? prev + 1 : 0))}
-                onPrev={() => setCurrent((prev) => (prev - 1 >= 0 ? prev - 1 : cartes.length - 1))}
-                equipes={equipes}
-                onAttribuer={handleAttribution}
-                onAnnuler={annulerAttribution}
-              />
+              </motion.div>
             )}
-          </div>
-        )}
+
+            {current !== null && (
+              <motion.div
+                key={current}
+                initial={{ x: 100, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: -100, opacity: 0 }}
+                transition={{ duration: 0.4 }}
+              >
+                <CardDisplay
+                  carte={cartes[current]}
+                  index={current}
+                  total={cartes.length}
+                  isValidated={points[current] != null}
+                  onNext={() => setCurrent((prev) => (prev + 1 < cartes.length ? prev + 1 : 0))}
+                  onPrev={() => setCurrent((prev) => (prev - 1 >= 0 ? prev - 1 : cartes.length - 1))}
+                  equipes={equipes}
+                  onAttribuer={handleAttribution}
+                  onAnnuler={annulerAttribution}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
         {erreur && <p className="text-red-600 dark:text-red-400 mt-4 text-center">{erreur}</p>}
       </div>

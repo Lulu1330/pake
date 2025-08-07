@@ -1,43 +1,6 @@
 import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { equipeColors } from "./Constants";
-
-const cardStyle = (themeColor) => ({
-  backgroundColor: themeColor || "#fff",
-  borderRadius: "1rem",
-  padding: "2rem",
-  minHeight: "250px",
-  width: "300px",
-  margin: "auto",
-  boxShadow: "0 8px 16px rgba(0,0,0,0.2)",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "space-between",
-  fontSize: "1.5rem",
-  position: "relative",
-});
-
-const pointBadgeStyle = {
-  position: "absolute",
-  top: 10,
-  right: 10,
-  backgroundColor: "green",
-  color: "white",
-  padding: "4px 8px",
-  borderRadius: "6px",
-  fontSize: "0.9rem",
-};
-
-const buttonContainerStyle = {
-  display: "flex",
-  gap: "1rem",
-  marginTop: "1.5rem",
-};
-
-const footerStyle = {
-  fontSize: "0.8rem",
-  marginTop: "0.5rem",
-};
 
 export default function CardDisplay({
   carte,
@@ -53,84 +16,85 @@ export default function CardDisplay({
   if (!carte) return null;
 
   return (
-    <div
-      style={{
-        border: "1px solid #ccc",
-        borderRadius: "12px",
-        padding: "1.5rem",
-        textAlign: "center",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-        width: "100%",           // responsive
-        maxWidth: "400px",       // limite raisonnable
-        margin: "0 auto",
-        minHeight: "300px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        boxSizing: "border-box", // evite le débordement
-        overflow: "hidden",      // sécurité
-      }}
+    <motion.div
+      key={carte.carte + index}
+      initial={{ opacity: 0, x: 50, scale: 0.9 }}
+      animate={{ opacity: 1, x: 0, scale: 1 }}
+      exit={{ opacity: 0, x: -50, scale: 0.9 }}
+      transition={{ duration: 0.4 }}
+      className="max-w-md w-full mx-auto p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800 flex flex-col justify-between min-h-[320px] overflow-hidden"
     >
-    <div>
-      <strong>{carte.carte}</strong>
-      <br />
-      <small>{carte.theme}</small>
-    </div>
-
-    {isValidated && (
-      <button
-        onClick={onAnnuler}
-        style={{
-          marginTop: "12px",
-          backgroundColor: "#e11d48",
-          color: "white",
-          border: "none",
-          borderRadius: "8px",
-          padding: "6px 12px",
-          cursor: "pointer",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
-        }}
-      >
-        ❌ Annuler l’attribution
-      </button>
-    )}
-
-    <div style={{ marginTop: "1rem", display: "flex", justifyContent: "center", gap: "1rem" }}>
-      <button onClick={onPrev} aria-label="Carte précédente">
-        ⬅️
-      </button>
-      <button onClick={onNext} aria-label="Carte suivante">
-        ➡️
-      </button>
-    </div>
-
-    {equipes?.length > 0 && (
-      <div style={{ marginTop: "1.5rem" }}>
-        <p style={{ fontWeight: "bold", marginBottom: "0.5rem" }}>
-          Attribuer à une équipe :
-        </p>
-        <div style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "0.5rem",
-          justifyContent: "center"
-        }}>
-          {equipes.map((eq, i) => (
-            <button
-              key={i}
-              onClick={() => onAttribuer(i)}
-              className={`btn ${equipeColors[i % equipeColors.length]}`}
-            >
-              {eq}
-            </button>
-          ))}
-        </div>
+      {/* Carte principale */}
+      <div className="text-center">
+        <strong className="text-xl md:text-2xl text-indigo-600 dark:text-indigo-400">
+          {carte.carte}
+        </strong>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{carte.theme}</p>
       </div>
-    )}
 
-    <div style={{ marginTop: "1rem", fontSize: "0.9rem", color: "#555" }}>
-      Carte {index + 1} sur {total}
-    </div>
-  </div>
-);
+      {/* Bouton annuler attribution */}
+      <AnimatePresence>
+        {isValidated && (
+          <motion.button
+            onClick={onAnnuler}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.3 }}
+            className="mt-4 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded shadow-md focus:outline-none focus:ring-2 focus:ring-red-400"
+          >
+            ❌ Annuler l’attribution
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Navigation cartes */}
+      <div className="flex justify-center gap-8 mt-6 text-2xl select-none">
+        <motion.button
+          whileTap={{ scale: 0.8 }}
+          onClick={onPrev}
+          aria-label="Carte précédente"
+          className="cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition"
+        >
+          ⬅️
+        </motion.button>
+        <motion.button
+          whileTap={{ scale: 0.8 }}
+          onClick={onNext}
+          aria-label="Carte suivante"
+          className="cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition"
+        >
+          ➡️
+        </motion.button>
+      </div>
+
+      {/* Attribution équipes */}
+      {equipes.length > 0 && (
+        <div className="mt-6 text-center">
+          <p className="font-semibold mb-2 text-gray-700 dark:text-gray-300">
+            Attribuer à une équipe :
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            {equipes.map((eq, i) => (
+              <motion.button
+                key={i}
+                onClick={() => onAttribuer(i)}
+                whileTap={{ scale: 0.9 }}
+                className={`py-2 px-4 rounded font-medium shadow-sm text-white transition ${
+                  equipeColors[i % equipeColors.length]
+                }`}
+              >
+                {eq}
+              </motion.button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Indicateur carte courante */}
+      <div className="mt-4 text-center text-sm text-gray-500 dark:text-gray-400 select-none">
+        Carte {index + 1} sur {total}
+      </div>
+    </motion.div>
+  );
 }

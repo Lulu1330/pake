@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
 export default function ThemeSelector({
@@ -10,78 +11,83 @@ export default function ThemeSelector({
 }) {
   const [showThemes, setShowThemes] = useState(false);
 
-  return (
-    <div style={{ marginTop: "2rem", textAlign: "left" }}>
-      <label><strong>🎨 Choisissez les thèmes :</strong></label>
+  const toggleDisplay = () => setShowThemes((prev) => !prev);
 
+  return (
+    <div className="mt-6">
+      <label className="font-bold text-lg text-gray-800 dark:text-gray-200">
+        🎨 Choisissez les thèmes :
+      </label>
+
+      {/* Toggle button */}
       <button
-        onClick={() => setShowThemes((prev) => !prev)}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          marginTop: "0.5rem",
-          backgroundColor: "#f0f0f0",
-          border: "1px solid #ccc",
-          padding: "0.5rem 1rem",
-          borderRadius: "8px",
-          cursor: "pointer",
-          fontSize: "1rem",
-          transition: "background-color 0.2s ease",
-        }}
+        onClick={toggleDisplay}
+        className="flex items-center gap-2 mt-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 px-4 py-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition"
       >
         {showThemes ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-        <span style={{ marginLeft: "0.5rem" }}>
+        <span>
           {showThemes
             ? "Fermer les thèmes"
             : `${selectedThemes.length} thème${selectedThemes.length > 1 ? "s" : ""} sélectionné${selectedThemes.length > 1 ? "s" : ""}`}
         </span>
       </button>
 
-      {showThemes && (
-        <div style={{ marginTop: "1rem", transition: "max-height 0.3s ease" }}>
-          <div style={{ marginBottom: "0.5rem" }}>
-            <label>
-              <input
-                type="checkbox"
-                checked={allSelected}
-                onChange={toggleSelectAll}
-              />
-              <strong> Tout sélectionner</strong>
-            </label>
-          </div>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-              gap: "0.5rem",
-            }}
+      {/* Animated theme list */}
+      <AnimatePresence initial={false}>
+        {showThemes && (
+          <motion.div
+            className="mt-4"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.4 }}
           >
-            {allThemes.map((theme) => (
-              <label
-                key={theme}
-                style={{
-                  background: selectedThemes.includes(theme) ? "#def" : "#f9f9f9",
-                  padding: "0.5rem",
-                  borderRadius: "6px",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  border: "1px solid #ccc",
-                }}
-              >
+            {/* Select all */}
+            <div className="mb-3">
+              <label className="inline-flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                 <input
                   type="checkbox"
-                  checked={selectedThemes.includes(theme)}
-                  onChange={() => handleCheckboxChange(theme)}
-                  style={{ marginRight: "0.5rem" }}
+                  checked={allSelected}
+                  onChange={toggleSelectAll}
+                  className="accent-indigo-600"
                 />
-                {theme}
+                <span><strong>Tout sélectionner</strong></span>
               </label>
-            ))}
-          </div>
-        </div>
-      )}
+            </div>
+
+            {/* List of themes */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+              {allThemes.map((theme) => {
+                const isChecked = selectedThemes.includes(theme);
+                return (
+                  <motion.label
+                    key={theme}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className={`flex items-center gap-2 px-3 py-2 rounded border cursor-pointer transition ${
+                      isChecked
+                        ? "bg-indigo-100 dark:bg-indigo-800 border-indigo-300 dark:border-indigo-600"
+                        : "bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600"
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={isChecked}
+                      onChange={() => handleCheckboxChange(theme)}
+                      className="accent-indigo-600"
+                    />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">
+                      {theme}
+                    </span>
+                  </motion.label>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
