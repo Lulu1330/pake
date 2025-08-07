@@ -15,3 +15,12 @@ export const allThemes = [
   'Événements',
   'Disney'
 ];
+
+export const equipeColors = [
+  "btn-green",
+  "btn-yellow",
+  "btn-rose",
+  "btn-blue",
+  "btn-lime",
+  "btn-gray",
+];

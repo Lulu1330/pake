@@ -1,4 +1,5 @@
 import React from "react";
+import { equipeColors } from "./Constants";
 
 const cardStyle = (themeColor) => ({
   backgroundColor: themeColor || "#fff",
@@ -40,7 +41,6 @@ const footerStyle = {
 
 export default function CardDisplay({
   carte,
-  themeColor,
   index,
   total,
   onNext,
@@ -53,20 +53,24 @@ export default function CardDisplay({
   if (!carte) return null;
 
   return (
-  <div style={{
-      border: "1px solid #ccc",
-      borderRadius: "12px",
-      padding: "1.5rem",
-      textAlign: "center",
-      boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-      backgroundColor: "#fff",
-      maxWidth: "400px",
-      margin: "0 auto",
-      minHeight: "300px",    
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "space-between"
-    }}>
+    <div
+      style={{
+        border: "1px solid #ccc",
+        borderRadius: "12px",
+        padding: "1.5rem",
+        textAlign: "center",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+        width: "100%",           // responsive
+        maxWidth: "400px",       // limite raisonnable
+        margin: "0 auto",
+        minHeight: "300px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        boxSizing: "border-box", // evite le débordement
+        overflow: "hidden",      // sécurité
+      }}
+    >
     <div>
       <strong>{carte.carte}</strong>
       <br />
@@ -114,17 +118,8 @@ export default function CardDisplay({
           {equipes.map((eq, i) => (
             <button
               key={i}
-              onClick={() => {onAttribuer(i);
-              }}
-              style={{
-                backgroundColor: "#7c3aed",
-                color: "white",
-                border: "none",
-                borderRadius: "8px",
-                padding: "6px 12px",
-                cursor: "pointer",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
-              }}
+              onClick={() => onAttribuer(i)}
+              className={`btn ${equipeColors[i % equipeColors.length]}`}
             >
               {eq}
             </button>
