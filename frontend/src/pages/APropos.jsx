@@ -7,7 +7,7 @@ export default function APropos() {
 
       <section className="mb-6">
         <p className="text-lg">
-          Bienvenue sur <strong>Jeu de Cartes</strong>, une application web simple, ludique et conçue pour animer vos soirées, vos cours ou vos temps d’équipe !
+          Bienvenue sur <strong>Jeu de Cartes</strong>, une application web simple, ludique et conçue pour animer vos soirées, vos cours ou vos temps libres !
         </p>
       </section>
 
@@ -16,7 +16,7 @@ export default function APropos() {
         <p>
           Le but est de <strong>faire deviner un mot</strong> à son équipe dans un temps limité. Chaque bonne réponse rapporte un point.
           À la fin, l’équipe avec le plus de points remporte la partie ! 
-          (ce n'est qu'un exemple de jeu, vous pouvez faire ce que vous voulez qui nécessite un paquet de cartes)
+          (ce n'est qu'un exemple de jeu, vous pouvez faire ce que vous voulez qui nécessite un paquet de carte)
         </p>
       </section>
 
@@ -24,7 +24,7 @@ export default function APropos() {
         <h2 className="text-2xl font-bold text-indigo-600 mb-2 dark:text-white">👥 Pour qui ?</h2>
         <p>
           Ce jeu s’adresse à tous :
-          enseignants, familles, amis, animateurs, formateurs… ou toute personne qui aime jouer et collaborer !
+          familles, amis… ou toute personne qui aime jouer !
         </p>
       </section>
 

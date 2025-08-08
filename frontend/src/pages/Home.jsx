@@ -208,6 +208,13 @@ export default function Home({ darkMode, setDarkMode }) {
             {timeLeft === 0 ? "⏰ Temps écoulé !" : `${timeLeft} sec restantes`}
           </p>
         </div>
+        
+        {/* SÉPARATEUR */}
+          <div className="relative my-6">
+            <hr className="border-t border-gray-400 dark:border-gray-600" />
+            <span className="absolute left-1/2 transform -translate-x-1/2 -top-3 bg-[#fdfdfd] dark:bg-gray-900 px-3 text-gray-500 dark:text-gray-400 text-sm font-medium">
+            </span>
+          </div>
 
         {/* ACTIONS */}
         <div className="flex flex-wrap gap-4 justify-center">
