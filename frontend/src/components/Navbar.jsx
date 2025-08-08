@@ -21,7 +21,7 @@ export default function Navbar({ darkMode, setDarkMode }) {
           <Link to="/politique-confidentialite" className="hover:text-indigo-500 dark:hover:text-indigo-300 transition">
             Confidentialité
           </Link>
-
+          
           {/* Thème */}
           <button
             onClick={() => setDarkMode(!darkMode)}
