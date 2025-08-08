@@ -230,7 +230,7 @@ export default function Home({ darkMode, setDarkMode }) {
         {/* LOADING */}
         {isLoading && (
           <p className="text-center text-blue-600 dark:text-blue-300 font-semibold my-4 animate-pulse">
-            ⏳ Chargement des cartes...
+            ⏳ Chargement des cartes...(1er Tirage un peu long, environ 20s)
           </p>
         )}
 
