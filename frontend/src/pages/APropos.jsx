@@ -34,7 +34,7 @@ export default function APropos() {
         <p className="text-lg">
           Bienvenue sur <strong>Pake de Cartes</strong>, une application simple et ludique conçue pour animer vos soirées,
           cours ou moments libres avec un <strong>jeu d’ambiance sans matériel</strong> et accessible à tous. 
-          Idéal pour jouer même quand vous n’avez pas la boîte officielle sous la main.
+          Idéal pour jouer quand vous n’avez pas de carte sous la main.
         </p>
       </section>
 
@@ -45,7 +45,7 @@ export default function APropos() {
         <p>
           Vous cherchez à <strong>jouer à Time’s Up en ligne gratuitement</strong>, sans avoir la boîte officielle ?
           Pake de Cartes est une alternative gratuite qui reprend l’esprit du jeu : tirage de cartes aléatoire,
-          chrono, scores et équipes personnalisables.
+          chrono, scores et équipes personnalisables. Ici, Time’s Up n’est qu’un exemple : inventez vos propres jeux avec un simple paquet de carte.
         </p>
         <ol className="list-decimal list-inside my-3">
           <li>Choisissez vos thèmes, le nombre et le nom d'équipe</li>
