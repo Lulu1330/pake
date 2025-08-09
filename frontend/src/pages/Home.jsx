@@ -15,18 +15,18 @@ export default function Home({ darkMode, setDarkMode }) {
   const [flipped, setFlipped] = useState(false);
 
   const [config, setConfig] = useState({
-    nbCartes: 5,
+    nbCartes: 20,
     nbEquipes: 2,
-    selectedThemes: [],
-    chrono: 60,
+    selectedThemes: allThemes,
+    chrono: 90,
+    
   });
 
-  const [equipes, setEquipes] = useState(["Équipe 1", "Équipe 2"]);
+  const [equipes, setEquipes] = useState(["Team 1", "Team 2"]);
   const [scoreEquipes, setScoreEquipes] = useState({});
   const [timeLeft, setTimeLeft] = useState(config.chrono);
   const [isRunning, setIsRunning] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
   const allSelected = config.selectedThemes.length === allThemes.length;
 
   const [direction, setDirection] = useState(1);
@@ -147,6 +147,7 @@ export default function Home({ darkMode, setDarkMode }) {
   };
 
   return (
+    
     <div className="w-full h-screen overflow-x-hidden bg-[#fdfdfd] dark:bg-gray-900 text-[#222] dark:text-gray-100 transition-colors duration-300">
       <div className="w-full h-full flex flex-col p-4 sm:p-6 overflow-auto space-y-6">
 
