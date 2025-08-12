@@ -24,23 +24,24 @@ code {
 .btn {
   @apply px-4 py-2 rounded shadow text-white font-semibold hover:brightness-110 transition;
 }
-.btn-green {
-  @apply bg-green-500 dark:bg-green-600;
+.btn-chrono-green {
+  @apply bg-green-600 text-white hover:bg-green-700 transition px-4 py-2 rounded;
 }
-.btn-yellow {
-  @apply bg-yellow-400 dark:bg-yellow-600;
+.btn-chrono-yellow {
+  @apply bg-yellow-500 text-black hover:bg-yellow-600 transition px-4 py-2 rounded;
 }
-.btn-rose {
-  @apply bg-rose-400 dark:bg-rose-600;
+.btn-chrono-rose {
+  @apply bg-pink-500 text-white hover:bg-pink-600 transition px-4 py-2 rounded;
 }
-.btn-blue {
-  @apply bg-sky-400 dark:bg-sky-600;
+
+.btn-tirage-blue {
+  @apply bg-blue-600 text-white hover:bg-blue-700 transition px-4 py-2 rounded;
 }
-.btn-lime {
-  @apply bg-lime-400 dark:bg-lime-600;
+.btn-tirage-lime {
+  @apply bg-lime-500 text-black hover:bg-lime-600 transition px-4 py-2 rounded;
 }
-.btn-gray {
-  @apply bg-gray-400 dark:bg-gray-600;
+.btn-tirage-gray {
+  @apply bg-gray-600 text-white hover:bg-gray-700 transition px-4 py-2 rounded;
 }
 .btn-outline {
   @apply border border-gray-400 text-gray-700 hover:bg-gray-100 dark:text-white dark:border-gray-500 dark:hover:bg-gray-700;
@@ -66,4 +67,17 @@ code {
 /* === Groupe de champ === */
 .form-group {
   @apply mb-4 flex flex-col;
+}
+
+.perspective {
+  perspective: 1000px;
+}
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+}
+.rotate-y-180 {
+  transform: rotateY(180deg);
 }

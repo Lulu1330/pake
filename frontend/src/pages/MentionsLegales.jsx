@@ -47,15 +47,6 @@ export default function MentionsLegales() {
         </p>
       </section>
 
-      <section className="mb-6">
-        <h2 className="text-xl font-semibold text-indigo-600 dark:text-white">Données personnelles</h2>
-        <p className="mt-2">
-          Ce site ne collecte pas de données personnelles sensibles à des fins commerciales. Si vous soumettez des informations
-          (par exemple via un formulaire de contact), elles seront utilisées uniquement pour répondre à votre demande. Pour
-          toute question concernant la confidentialité, contactez-nous à l’adresse indiquée ci‑dessus.
-        </p>
-      </section>
-
       <section>
         <h2 className="text-xl font-semibold text-indigo-600 dark:text-white">Contact</h2>
         <p className="mt-2">
