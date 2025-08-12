@@ -117,7 +117,7 @@ export default function Home({ darkMode, setDarkMode }) {
 
   const reshuffleCartes = () => {
     setCartes((prev) => [...prev].sort(() => Math.random() - 0.5));
-    setCurrent(null);
+    setCurrent(0);
     setPoints({});
   };
 
@@ -146,23 +146,23 @@ export default function Home({ darkMode, setDarkMode }) {
   };
 
   return (
-    <div className="w-full h-screen overflow-x-hidden bg-[#fdfdfd] dark:bg-gray-900 text-[#222] dark:text-gray-100 transition-colors duration-300">
+    <div className="w-full h-screen overflow-x-hidden bg-gray-100 dark:bg-gray-800 text-[#222] dark:text-gray-100 transition-colors duration-300">
       <div className="w-full h-full flex flex-col p-4 sm:p-6 overflow-auto space-y-6">
 
-        {/* Bouton Rouage */}
-        <div className="flex justify-end">
-          <button
-            onClick={() => setShowHelp(true)}
-            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition"
-            title="Aide"
-          >
-            <FiSettings size={24} />
-          </button>
-        </div>
+        {/* Config + Bouton Rouage */}
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-bold">Configuration</h2>
+            <button
+              onClick={() => setShowHelp(true)}
+              className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+              title="Aide"
+            >
+              <FiSettings size={24} />
+            </button>
+          </div>
 
         {/* CONFIG */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 space-y-4">
-          <h2 className="text-xl font-semibold">Configuration</h2>
+        <div className="bg-gray-300 dark:bg-gray-700 rounded-lg shadow-md p-6 space-y-4">
 
           <ThemeSelector
             allThemes={allThemes}

@@ -1,6 +1,7 @@
 // src/components/CardDisplay.jsx
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import logo from "../assets/logo.png"; // chemin à adapter selon l'endroit où tu mets l'image
 
 /**
  * Couleurs fixées en dur (Tailwind classes + hex fallback)
@@ -62,18 +63,22 @@ export default function CardDisplay({
           >
             {/* Face cachée */}
             {!isFlipped && (
-              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center text-xl font-bold rounded-xl backface-hidden">
-                🃏 Retournez la carte
+              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center rounded-xl backface-hidden">
+                <img
+                  src={logo}
+                  alt="Dos de la carte"
+                  className="max-w-[60%] max-h-[60%] object-contain"
+                />
               </div>
             )}
 
             {/* Face visible */}
             {/* on affiche la face même si isFlipped = true OU si ce n'est pas la 1ère carte */}
-            <div className="absolute inset-0 bg-white dark:bg-gray-900 text-center p-6 rounded-xl backface-hidden rotate-y-180 flex flex-col justify-center">
-              <strong className="text-xl md:text-2xl text-indigo-600 dark:text-indigo-400">
+            <div className="absolute inset-0 bg-gray-400 dark:bg-gray-400 text-center p-6 rounded-xl backface-hidden rotate-y-180 flex flex-col justify-center">
+              <strong className="text-xl md:text-2xl text-indigo-500 dark:text-indigo-500">
                 {carte.carte}
               </strong>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">{carte.theme}</p>
+              <p className="text-sm text-gray-100 dark:text-gray-100 mt-2">{carte.theme}</p>
             </div>
           </motion.div>
         </div>
