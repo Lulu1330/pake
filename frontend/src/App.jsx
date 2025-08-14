@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom"; // pas de Router ici
 import Home from './pages/Home.jsx';
 import APropos from './pages/APropos.jsx';
 import MentionsLegales from './pages/MentionsLegales.jsx';
 import PoliqueConfidentialite from './pages/PolitiqueConfidentialite.jsx';
 import Navbar from './components/Navbar.jsx';
+import ReactGA from "react-ga4";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -25,4 +26,5 @@ function App() {
     </div>
   );
 }
+
 export default App;
