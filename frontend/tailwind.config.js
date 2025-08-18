@@ -1,6 +1,9 @@
 module.exports = {
   darkMode: ['class', '[data-theme="dark"]'], // ← active le support de data-theme
-  content: ['./src/**/*.{js,jsx,ts,tsx}'],
+  content: [
+  "./index.html",
+  "./src/**/*.{js,ts,jsx,tsx}",
+],
   safelist: [
     "bg-red-500", "hover:bg-red-600",
     "bg-blue-500", "hover:bg-blue-600",

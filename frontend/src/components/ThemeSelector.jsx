@@ -16,7 +16,7 @@ export default function ThemeSelector({
   return (
     <div className="mt-6">
       <label className="font-bold text-lg text-gray-800 dark:text-gray-200">
-        🎨 Choisissez les thèmes :
+        🎨 Sélectionnez vos thèmes :
       </label>
 
       {/* Toggle button */}
