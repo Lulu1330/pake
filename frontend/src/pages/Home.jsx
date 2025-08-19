@@ -1,19 +1,37 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiSettings, FiChevronDown, FiChevronUp, FiPauseCircle, FiPlayCircle, FiRefreshCcw, FiClock } from "react-icons/fi";
+import {
+  FiSettings,
+  FiChevronDown,
+  FiChevronUp,
+  FiPauseCircle,
+  FiPlayCircle,
+  FiRefreshCcw,
+  FiClock,
+  FiPlusCircle,
+  FiMinusCircle,
+} from "react-icons/fi";
 import { VscJersey } from "react-icons/vsc";
+
 import CardDisplay from "../components/CardDisplay";
+import ReglesModal from "../components/ReglesModal";
 import ThemeSelector from "../components/ThemeSelector";
-import { allThemes, equipeColors } from "../components/Constants";
 import ParametresPartie from "../components/ParametresPartie.jsx";
+import { allThemes, equipeColors } from "../components/Constants";
+
 import "../index.css";
 
 export default function Home({ darkMode, setDarkMode }) {
+  /* --------------------------------------------------
+   * ÉTATS
+   * -------------------------------------------------- */
+  const [showRegles, setShowRegles] = useState(true);
   const [cartes, setCartes] = useState([]);
   const [current, setCurrent] = useState(null);
   const [points, setPoints] = useState({});
   const [erreur, setErreur] = useState("");
   const [flipped, setFlipped] = useState(false);
+
   const [savedTirages, setSavedTirages] = useState([]);
   const [cartesParEquipe, setCartesParEquipe] = useState({});
 
@@ -27,17 +45,23 @@ export default function Home({ darkMode, setDarkMode }) {
   const [equipes, setEquipes] = useState(["Équipe 1", "Équipe 2"]);
   const [scoreEquipes, setScoreEquipes] = useState({});
   const [timeLeft, setTimeLeft] = useState(config.chrono);
+
   const [isRunning, setIsRunning] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
   const [showConfig, setShowConfig] = useState(true);
-  const allSelected = config.selectedThemes.length === allThemes.length;
-  const [showSaved, setShowSaved] = useState(true);
-  const [showCartesAttrib, setShowCartesAttrib] = useState(true);
-  const [direction, setDirection] = useState(1);
+  const [showSaved, setShowSaved] = useState(false);
+  const [showCartesAttrib, setShowCartesAttrib] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
 
+  const [direction, setDirection] = useState(1);
+
+  const allSelected = config.selectedThemes.length === allThemes.length;
   const audioRef = useRef(null);
 
+  /* --------------------------------------------------
+   * USE EFFECTS
+   * -------------------------------------------------- */
   // Timer
   useEffect(() => {
     if (isRunning && timeLeft > 0) {
@@ -50,20 +74,25 @@ export default function Home({ darkMode, setDarkMode }) {
     }
   }, [isRunning, timeLeft]);
 
+  // Jouer son quand le chrono atteint 0
   useEffect(() => {
     if (timeLeft === 0 && audioRef.current) {
-      audioRef.current.currentTime = 0; // remet au début
-      audioRef.current.play().catch(err => console.log("Erreur audio:", err));
+      audioRef.current.currentTime = 0;
+      audioRef.current.play().catch((err) =>
+        console.log("Erreur audio:", err)
+      );
     }
   }, [timeLeft]);
 
-
-  // Dark mode
+  // Mode sombre
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", darkMode ? "dark" : "light");
+    document.documentElement.setAttribute(
+      "data-theme",
+      darkMode ? "dark" : "light"
+    );
   }, [darkMode]);
 
-  // Equipes dynamiques
+  // Gestion dynamique du nombre d’équipes
   useEffect(() => {
     setEquipes((prev) => {
       const nouvellesEquipes = [...prev];
@@ -73,6 +102,13 @@ export default function Home({ darkMode, setDarkMode }) {
       return nouvellesEquipes.slice(0, config.nbEquipes);
     });
   }, [config.nbEquipes]);
+
+  /* --------------------------------------------------
+   * FONCTIONS UTILITAIRES
+   * -------------------------------------------------- */
+  const supprimerTirage = (index) => {
+    setSavedTirages((prev) => prev.filter((_, i) => i !== index));
+  };
 
   const handleInputChange = (field, value) => {
     setConfig((prev) => ({ ...prev, [field]: value }));
@@ -163,6 +199,19 @@ export default function Home({ darkMode, setDarkMode }) {
     if (current + 1 < cartes.length) setCurrent(current + 1);
   };
 
+  const ajouterPoint = (equipeIndex) => {
+    setScoreEquipes((prev) => ({
+      ...prev,
+      [equipeIndex]: (prev[equipeIndex] || 0) + 1,
+    }));
+  };
+
+  const retirerPoint = (equipeIndex) => {
+    setScoreEquipes((prev) => ({
+      ...prev,
+      [equipeIndex]: Math.max(0, (prev[equipeIndex] || 0) - 1),
+    }));
+  };
 
   const annulerAttribution = () => {
     if (current == null || points[current] == null) return;
@@ -190,9 +239,14 @@ export default function Home({ darkMode, setDarkMode }) {
     });
   };
 
+
+  /* --------------------------------------------------
+   * RENDU JSX
+   * -------------------------------------------------- */
+
 return (
-  <div className="w-full h-screen overflow-x-hidden bg-gray-100 dark:bg-gray-800 text-[#222] dark:text-gray-100 transition-colors duration-300">
-    <div className="w-full h-full flex flex-col p-4 sm:p-6 overflow-auto space-y-6">
+  <div className="w-full min-h-screen overflow-x-hidden bg-gray-100 dark:bg-gray-800 text-[#222] dark:text-gray-100 transition-colors duration-300">
+    <div className="w-full h-full flex flex-col p-4 sm:p-6 space-y-6">
 
       {/* Bouton pour cacher/afficher la configuration */}
       <div className="flex justify-between items-center mb-4">
@@ -399,10 +453,10 @@ return (
       </div>
 
       {/* TIRAGE SAUVE */}
-      <div className="bg-yellow-100 dark:bg-yellow-900 rounded p-4 shadow">
+      <div className="bg-gray-100 dark:bg-gray-800 rounded p-4 shadow">
         <div className="flex justify-between items-center mb-2">
-          <h3 className="text-lg font-semibold text-yellow-700 dark:text-yellow-200">
-            📦 Tirages sauvegardés
+          <h3 className="text-lg font-semibold text-[#222] dark:text-gray-100">
+            📦 Tirages réalisés
           </h3>
           <button
             onClick={() => setShowSaved(!showSaved)}
@@ -416,7 +470,7 @@ return (
           <>
             {savedTirages.length === 0 ? (
               <p className="text-sm text-gray-600 dark:text-gray-300">
-                Aucun tirage sauvegardé.
+                Aucun tirage.
               </p>
             ) : (
               savedTirages.map((tirage, i) => (
@@ -432,6 +486,12 @@ return (
                     className="px-2 py-1 text-sm rounded bg-blue-500 text-white hover:bg-blue-600"
                   >
                     Relancer
+                  </button>
+                  <button
+                    onClick={() => supprimerTirage(i)}
+                    className="px-2 py-1 text-sm rounded bg-red-500 text-white hover:bg-red-600"
+                  >
+                    Supprimer
                   </button>
                 </div>
               ))
@@ -449,20 +509,47 @@ return (
 
       {/* SCORES */}
       <div className="bg-purple-100 dark:bg-purple-900 rounded p-4 shadow">
-        <h3 className="text-lg font-semibold mb-2 text-purple-700 dark:text-purple-200">🏆 Scores</h3>
-        <div className="grid grid-cols-2 gap-4">
+        <h3 className="text-lg font-semibold mb-2 text-purple-700 dark:text-purple-200">
+          🏆 Scores
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {equipes.map((eq, i) => (
-            <div key={i} className={`p-3 rounded text-center font-semibold ${equipeColors[i % equipeColors.length]}`}>
-              {eq} : {scoreEquipes[i] || 0} point{(scoreEquipes[i] || 0) > 1 ? "s" : ""}
+            <div
+              key={i}
+              className={`p-3 rounded font-semibold flex items-center justify-between ${equipeColors[i % equipeColors.length]}`}
+            >
+              {/* Bouton - */}
+              <button
+                onClick={() => retirerPoint(i)}
+                className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-200"
+                title="Retirer un point"
+              >
+                <FiMinusCircle size={28} />
+              </button>
+
+              {/* Nom + Score */}
+              <p className="text-center flex-1">
+                {eq} : {scoreEquipes[i] || 0}{" "}
+                point{(scoreEquipes[i] || 0) > 1 ? "s" : ""}
+              </p>
+
+              {/* Bouton + */}
+              <button
+                onClick={() => ajouterPoint(i)}
+                className="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-200"
+                title="Ajouter un point"
+              >
+                <FiPlusCircle size={28} />
+              </button>
             </div>
           ))}
         </div>
       </div>
       
       {/* CARTES PAR EQUIPES */}
-      <div className="bg-green-100 dark:bg-green-900 rounded p-4 shadow mt-4">
+      <div className="bg-gray-100 dark:bg-gray-800 rounded p-4 shadow mt-4">
         <div className="flex justify-between items-center mb-2">
-          <h3 className="text-lg font-semibold text-green-700 dark:text-green-200">
+          <h3 className="text-lg font-semibold text-[#222] dark:text-gray-100">
             🃏 Cartes attribuées
           </h3>
           <button
@@ -557,6 +644,8 @@ return (
               <li>▶️ <b>Démarrer</b> : lance le chrono.</li>
               <li>⏸️ <b>Pause</b> : met le chrono en pause.</li>
               <li>🔄 <b>Reset</b> : remet le chrono au temps initial.</li>
+              <li>📦 <b>Tirages réalisés</b> : Afficher = garde les tirages réalisés pour pouvoir les relancer.</li>
+              <li>🃏 <b>Cartes attribuées</b> : Afficher = les cartes attribuées à chaque équipe.</li>
             </ul>
             <div className="mt-4 flex justify-end">
               <button onClick={() => setShowHelp(false)} className="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600">
@@ -567,6 +656,7 @@ return (
         </motion.div>
       )}
     </AnimatePresence>
+    <ReglesModal showRegles={showRegles} setShowRegles={setShowRegles} />
   </div>
 )
 };
