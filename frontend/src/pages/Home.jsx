@@ -443,10 +443,9 @@ return (
 
       {/* ACTIONS */}
       <div className="flex flex-wrap gap-4 justify-center">
-        <button onClick={fetchCartes} className="btn-tirage-blue">🎲 Tirer les cartes</button>
+        <button onClick={fetchCartes} className="btn-tirage-blue">🎲 Nouveau Tirage</button>
         {cartes.length > 0 && (
           <>
-            <button onClick={reshuffleCartes} className="btn-tirage-lime">🔁 Relancer</button>
             <button onClick={resetGame} className="btn-tirage-gray">♻️ Réinitialiser</button>
           </>
         )}
@@ -512,7 +511,7 @@ return (
         <h3 className="text-lg font-semibold mb-2 text-purple-700 dark:text-purple-200">
           🏆 Scores
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           {equipes.map((eq, i) => (
             <div
               key={i}
