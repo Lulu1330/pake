@@ -27,7 +27,7 @@ export default function ReglesModal({ showRegles, setShowRegles }) {
 
             <h2 className="text-lg font-semibold mb-2">✨ Vous avez à votre disposition :</h2>
             <ul className="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300 mb-6">
-              <li>🃏 Un paquet de cartes (aujourd’hui <b>660 cartes</b>)</li>
+              <li>🃏 Un paquet de cartes (aujourd’hui <b>700 cartes</b>)</li>
               <li>⚙️ Des options pour choisir le nombre de cartes, le nombre d’équipes et leur nom</li>
               <li>⏱️ Un chronomètre (avec durée personnalisable)</li>
               <li>🏆 Un scoreboard (où vous pouvez attribuer des cartes pour augmenter les points ou les ajouter manuellement)</li>

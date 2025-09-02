@@ -41,6 +41,7 @@ export default function Home({ darkMode, setDarkMode }) {
     selectedThemes: allThemes,
     chrono: 90,
   });
+  const [showChrono, setShowChrono] = useState(true);
 
   const [equipes, setEquipes] = useState(["Équipe 1", "Équipe 2"]);
   const [scoreEquipes, setScoreEquipes] = useState({});
@@ -362,79 +363,91 @@ return (
           </motion.div>
         )}
       </AnimatePresence>
+      
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-4 space-y-4 border border-gray-200 dark:border-gray-700 flex flex-col items-center">
 
-      {/* Chronomètre toujours visible */}
-      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-6 space-y-6 border border-gray-200 dark:border-gray-700 flex flex-col items-center">
-        <h2 className="flex items-center gap-2 text-xl !font-bold !text-gray-800 dark:!text-gray-200 mb-4">
-          <FiClock size={26} /> Chronomètre
-        </h2>
+        {/* Chronomètre toujours visible */}
+        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-6 space-y-6 border border-gray-200 dark:border-gray-700 flex flex-col items-center">
+          <h2 className="flex items-center gap-2 text-xl !font-bold !text-gray-800 dark:!text-gray-200 mb-4">
+            <FiClock size={26} /> Chronomètre
+          </h2>
+          <button
+            onClick={() => setShowChrono(!showChrono)}
+            className="px-2 py-1 text-sm rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+          >
+            {showChrono ? "Masquer" : "Afficher"}
+          </button>
+        </div>
 
-        {/* Cadran circulaire */}
-        <div className="relative w-40 h-40">
-          <svg className="w-full h-full transform -rotate-90">
-            {/* Cercle gris (fond) */}
-            <circle
-              className="text-gray-300 dark:text-gray-700"
-              stroke="currentColor"
-              strokeWidth="8"
-              fill="transparent"
-              r="70"
-              cx="80"
-              cy="80"
-            />
-            {/* Cercle coloré (progression) */}
-            <circle
-              className="transition-all duration-1000 ease-linear text-indigo-500"
-              stroke="currentColor"
-              strokeWidth="8"
-              fill="transparent"
-              r="70"
-              cx="80"
-              cy="80"
-              strokeDasharray={2 * Math.PI * 70}
-              strokeDashoffset={2 * Math.PI * 70 * (timeLeft / config.chrono)}
-              strokeLinecap="round"
-            />
-          </svg>
+          {/* Cadran circulaire */}
+          {showChrono && (
+            <>
+              <div className="relative w-40 h-40">
+                <svg className="w-full h-full transform -rotate-90">
+                  {/* Cercle gris (fond) */}
+                  <circle
+                    className="text-gray-300 dark:text-gray-700"
+                    stroke="currentColor"
+                    strokeWidth="8"
+                    fill="transparent"
+                    r="70"
+                    cx="80"
+                    cy="80"
+                  />
+                  {/* Cercle coloré (progression) */}
+                  <circle
+                    className="transition-all duration-1000 ease-linear text-indigo-500"
+                    stroke="currentColor"
+                    strokeWidth="8"
+                    fill="transparent"
+                    r="70"
+                    cx="80"
+                    cy="80"
+                    strokeDasharray={2 * Math.PI * 70}
+                    strokeDashoffset={2 * Math.PI * 70 * (timeLeft / config.chrono)}
+                    strokeLinecap="round"
+                  />
+                </svg>
 
-          {/* Temps au centre */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className={`text-2xl font-bold ${timeLeft === 0 ? "text-red-600 animate-pulse" : ""}`}>
-              {timeLeft > 0 ? `${timeLeft}s` : "💥"}
-            </span>
+                {/* Temps au centre */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className={`text-2xl font-bold ${timeLeft === 0 ? "text-red-600 animate-pulse" : ""}`}>
+                    {timeLeft > 0 ? `${timeLeft}s` : "💥"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Boutons */}
+              <div className="flex flex-wrap gap-4 justify-center mt-6">
+                <button
+                  onClick={() => setIsRunning(true)}
+                >
+                <h2 className="flex items-center gap-2 text-lg !font-bold text-green-600 dark:text-green-400 mb-3">
+                        <FiPlayCircle size={30} />
+                </h2>
+                </button>
+                <button
+                  onClick={() => setIsRunning(false)}
+                >
+                <h2 className="flex items-center gap-2 text-lg !font-bold text-yellow-600 dark:text-yellow-400 mb-3">
+                        <FiPauseCircle size={30} />
+                </h2>
+                </button>
+                <button
+                  onClick={() => {
+                    setIsRunning(false);
+                    setTimeLeft(config.chrono);
+                  }}
+                >
+                <h2 className="flex items-center gap-2 text-lg !font-bold text-red-600 dark:text-red-400 mb-3">
+                        <FiRefreshCcw size={30} />
+                </h2>
+                </button>
+              </div>
+              <audio ref={audioRef} src="/assets/explosion.wav" preload="auto" />
+            </>
+            )}
           </div>
-        </div>
-
-        {/* Boutons */}
-        <div className="flex flex-wrap gap-4 justify-center mt-6">
-          <button
-            onClick={() => setIsRunning(true)}
-          >
-          <h2 className="flex items-center gap-2 text-lg !font-bold text-green-600 dark:text-green-400 mb-3">
-                  <FiPlayCircle size={30} />
-          </h2>
-          </button>
-          <button
-            onClick={() => setIsRunning(false)}
-          >
-          <h2 className="flex items-center gap-2 text-lg !font-bold text-yellow-600 dark:text-yellow-400 mb-3">
-                  <FiPauseCircle size={30} />
-          </h2>
-          </button>
-          <button
-            onClick={() => {
-              setIsRunning(false);
-              setTimeLeft(config.chrono);
-            }}
-          >
-          <h2 className="flex items-center gap-2 text-lg !font-bold text-red-600 dark:text-red-400 mb-3">
-                  <FiRefreshCcw size={30} />
-          </h2>
-          </button>
-        </div>
-
-        <audio ref={audioRef} src="/assets/explosion.wav" preload="auto" />
-      </div>
 
       {/* Séparateur */}
       <div className="relative my-6">
@@ -529,7 +542,6 @@ return (
               {/* Nom + Score */}
               <p className="text-center flex-1">
                 {eq} : {scoreEquipes[i] || 0}{" "}
-                point{(scoreEquipes[i] || 0) > 1 ? "s" : ""}
               </p>
 
               {/* Bouton + */}
@@ -560,26 +572,26 @@ return (
         </div>
 
         {showCartesAttrib && (
-          <>
+          <div className="grid grid-cols-2 gap-4 text-sm sm:text-base">
             {equipes.map((eq, i) => (
-              <div key={i} className="mb-3">
-                <p className="font-bold">{eq} :</p>
+              <div key={i} className="p-2 rounded bg-white dark:bg-gray-700 shadow-sm">
+                <p className="font-bold truncate">{eq} :</p>
                 {(!cartesParEquipe[i] || cartesParEquipe[i].length === 0) ? (
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Aucune carte</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Aucune carte</p>
                 ) : (
-                  <ul className="list-disc list-inside text-sm">
+                  <ul className="list-disc list-inside text-xs sm:text-sm">
                     {cartesParEquipe[i].map((c, idx) => (
                       <li key={idx}>
                         <span className="font-semibold">{c.carte}</span>
-                        <span className="ml-2 text-gray-500"></span>
                       </li>
                     ))}
                   </ul>
                 )}
               </div>
             ))}
-          </>
+          </div>
         )}
+
       </div>
 
       {/* CARTES */}
