@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 
 // ⚠️ Mets ici l’URL de ton backend Socket.IO
-const socket = io("https://mon-backend.com");
+const socket = io("https://pake-ke5g.onrender.com");
 
 export default function MotEnCommunPage() {
   const [room, setRoom] = useState("");
@@ -43,7 +43,7 @@ export default function MotEnCommunPage() {
   };
 
   return (
-    <div className="p-4 text-white">
+    <div className="p-4 text-gray-800 dark:text-gray-200">
       <button onClick={createGame} className="bg-indigo-600 p-2 rounded mr-2">
         Créer une partie
       </button>

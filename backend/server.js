@@ -9,7 +9,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "*", // ⚠️ en prod, mets ton domaine Vercel
+    origin: "https://www.pake-de-cartes.fr/", // ⚠️ en prod, mets ton domaine Vercel
     methods: ["GET", "POST"]
   }
 });
