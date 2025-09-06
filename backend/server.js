@@ -1,3 +1,4 @@
+// server.js
 import express from "express";
 import http from "http";
 import { Server } from "socket.io";
@@ -5,18 +6,18 @@ import cors from "cors";
 
 const app = express();
 app.use(cors());
+
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://www.pake-de-cartes.fr/", // ⚠️ en prod, mets ton domaine Vercel
+    origin: "https://www.pake-de-cartes.fr", // ⚠️ Mets ton domaine Vercel (sans / à la fin)
     methods: ["GET", "POST"]
   }
 });
 
-// Base temporaire (à remplacer par ta DB cartes.db)
+// === Jeu ===
 const cards = ["Chat", "Montagne", "Avion", "Lune", "Mer", "Pizza", "Chien"];
-
 let games = {}; // { roomCode: { cards, bans, round, attempts, players, score } }
 
 function getTwoCards(bans) {
@@ -28,6 +29,7 @@ function getTwoCards(bans) {
   return [c1, c2];
 }
 
+// === Socket.IO ===
 io.on("connection", (socket) => {
   console.log("✅ Nouveau joueur :", socket.id);
 
@@ -63,10 +65,8 @@ io.on("connection", (socket) => {
     const game = games[room];
     if (!game) return;
 
-    // stocker la proposition
     game.players[player] = word;
 
-    // quand 2 joueurs ont joué
     if (Object.keys(game.players).length === 2) {
       const words = Object.values(game.players);
       game.attempts++;
@@ -82,7 +82,7 @@ io.on("connection", (socket) => {
         game.players = {};
         io.to(room).emit("roundResult", { success: true, word: words[0] });
       } else if (game.attempts >= 3) {
-        // ❌ échec
+        // ❌ échec après 3 essais
         const used = Object.values(game.players);
         game.bans.push(...used);
         game.attempts = 0;
@@ -92,8 +92,9 @@ io.on("connection", (socket) => {
         game.round++;
         io.to(room).emit("roundResult", { success: false, words: used });
       } else {
+        // ❌ pas encore réussi mais encore des essais
         io.to(room).emit("roundResult", { success: false, try: game.attempts });
-        game.players = {}; // reset pour le prochain essai
+        game.players = {};
       }
     }
 
@@ -105,6 +106,8 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(3001, () => {
-  console.log("🔥 Serveur Socket.IO prêt sur http://localhost:3001");
+// === Démarrage serveur ===
+const PORT = process.env.PORT || 3001;
+server.listen(PORT, () => {
+  console.log(`🔥 Serveur Socket.IO prêt sur port ${PORT}`);
 });
