@@ -1,0 +1,17 @@
+{
+  "name": "pake-backend",
+  "version": "1.0.0",
+  "description": "Backend Express + Socket.IO pour le jeu Pake",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5",
+    "sqlite3": "^5.1.7"
+  }
+}
