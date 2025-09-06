@@ -105,7 +105,7 @@ function getTwoCards() {
   return drawFromDemo();
 }
 
-export default function MotEnCommun() {
+export function MotEnCommun() {
   const [cards, setCards] = useState(["", ""]);
   const [score, setScore] = useState(0);
   const [tries, setTries] = useState(3);
