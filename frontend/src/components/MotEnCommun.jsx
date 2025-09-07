@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { socket } from "./socket"; // <-- import
+import { socket } from "../socket"; // <-- import
 
 export default function MotEnCommun() {
   const [room, setRoom] = useState("");
