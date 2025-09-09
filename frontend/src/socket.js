@@ -1,11 +1,11 @@
+// src/socket.js
 import { io } from "socket.io-client";
 
-// 🔑 On choisit l'URL en fonction de l'environnement
-const URL =
-  import.meta.env.MODE === "development"
-    ? "http://localhost:3000" // backend local
-    : "https://pake-ke5g.onrender.com"; // backend Render (ton URL)
+// URL choisie automatiquement en fonction de ton fichier .env
+const URL = import.meta.env.VITE_SOCKET_URL || "http://localhost:3000";
+
+console.log("👉 Connexion au serveur :", URL);
 
 export const socket = io(URL, {
-  withCredentials: true, // important pour CORS
+  withCredentials: true,
 });
