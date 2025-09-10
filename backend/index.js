@@ -30,7 +30,9 @@ const db = await open({
 // Fonction utilitaire pour tirer 2 cartes différentes
 async function getTwoRandomCards(bans = []) {
   const cards = await db.all(
-    `SELECT * FROM cartes WHERE id NOT IN (${bans.length ? bans.join(",") : 0}) ORDER BY RANDOM() LIMIT 2`
+    `SELECT * FROM cartes 
+     WHERE id NOT IN (${bans.length ? bans.join(",") : 0}) 
+     ORDER BY RANDOM() LIMIT 2`
   );
   return cards;
 }
@@ -52,43 +54,20 @@ io.on("connection", (socket) => {
       room,
       bans: [],
       round: 1,
-      attempts: 0,
-      players: {}, // socket.id -> rôle
-      words: [],
-      attempts: 0,        // essais totaux
-      players: {},        // socket.id -> rôle
-      words: [],          // mots joués pour le round actuel
-      currentRound: { cards: [c1, c2], attempts: 0 }, // essais du round
-      history: [],        // historique des cartes et mots trouvés
       score: 0,
-      currentRound: { cards: [c1, c2] },
+      players: {}, // socket.id -> "A" ou "B"
+      words: [],   // mots joués ce round
+      currentRound: { cards: [c1, c2], attempts: 0 },
+      history: [],
     };
 
-    // Lorsqu'un round se termine
-    if (w1 === w2) {
-      game.score += 1;
-      game.history.push({
-        cards: game.currentRound.cards,
-        word: w1,
-        attempts: game.currentRound.attempts + 1,
-      });
-      game.currentRound.attempts = 0;
-      game.words = [];
-      // Nouveau round...
-    } else {
-      game.currentRound.attempts += 1;
-      game.words = [];
-    }
-    game.attempts += 1; // total global
-    io.to(room).emit("stateUpdate", game);
-
-    game.players[socket.id] = "A";
+    game.players[socket.id] = "A"; // créateur = joueur A
 
     games[room] = game;
 
     socket.join(room);
     socket.emit("gameCreated", room);
-    socket.emit("gameJoined", { room, role: "A" }); // 👈 très important !
+    socket.emit("gameJoined", { room, role: "A" });
     io.to(room).emit("stateUpdate", game);
   });
 
@@ -117,36 +96,66 @@ io.on("connection", (socket) => {
   });
 
   // --- Jouer un mot ---
-  socket.on("playWord", ({ room, word }) => {
+  socket.on("playWord", async ({ room, word }) => {
     const game = games[room];
     if (!game) return;
 
     const role = game.players[socket.id];
     if (!role) return;
 
-    game.words.push({ role, word });
+    const cleanWord = word.toLowerCase().trim();
 
-    // Vérifie si les deux joueurs ont joué
+    // Ajoute le mot au round courant
+    game.words.push({ role, word: cleanWord });
+
     if (game.words.length === 2) {
-      const [w1, w2] = game.words.map((w) => w.word.toLowerCase().trim());
+      const [w1, w2] = game.words.map((w) => w.word);
+
       if (w1 === w2) {
+        // ✅ Réussi
         game.score += 1;
         io.to(room).emit("roundResult", { success: true, word: w1 });
 
+        game.history.push({
+          cards: [...game.currentRound.cards],
+          word: w1,
+          attempts: game.currentRound.attempts + 1,
+        });
+
         // Nouveau round
-        (async () => {
+        game.bans.push(...game.currentRound.cards.map((c) => c.id));
+        const [c1, c2] = await getTwoRandomCards(game.bans);
+        game.round += 1;
+        game.words = [];
+        game.currentRound = { cards: [c1, c2], attempts: 0 };
+        io.to(room).emit("stateUpdate", game);
+      } else {
+        // ❌ Mots différents
+        game.currentRound.attempts += 1;
+        io.to(room).emit("roundResult", {
+          success: false,
+          message: "Mots différents !",
+        });
+        game.words = [];
+
+        if (game.currentRound.attempts >= 3) {
+          // Round perdu → on passe quand même au suivant
+          game.history.push({
+            cards: [...game.currentRound.cards],
+            word: null,
+            attempts: 3,
+          });
           game.bans.push(...game.currentRound.cards.map((c) => c.id));
           const [c1, c2] = await getTwoRandomCards(game.bans);
           game.round += 1;
           game.words = [];
-          game.currentRound = { cards: [c1, c2] };
-          io.to(room).emit("stateUpdate", game);
-        })();
-      } else {
-        io.to(room).emit("roundResult", { success: false, message: "Mots différents !" });
-        game.words = [];
+          game.currentRound = { cards: [c1, c2], attempts: 0 };
+        }
+
+        io.to(room).emit("stateUpdate", game);
       }
     } else {
+      // 1 seul joueur a joué → broadcast état
       io.to(room).emit("stateUpdate", game);
     }
   });

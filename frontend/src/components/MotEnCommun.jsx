@@ -64,15 +64,15 @@ return (
           <li key={i} className="p-2 bg-gray-700 rounded">
             <div className="flex justify-between">
               <span>
-                {h.cards.map((c) => c.carte).join(" / ")} → {h.word}
+                {(h.cards || []).map((c) => c.carte).join(" / ")} → {h.word}
               </span>
               <span className="text-red-500 font-bold">{h.attempts}</span>
             </div>
           </li>
         ))}
       </ul>
-      <p className="mt-4">Essais totaux : {state?.attempts || 0}</p>
-  </div>
+      <p className="mt-4">Essais totaux : {state?.attempts ?? 0}</p>
+    </div>
 
     {/* Partie principale */}
     <div className="flex-1">
@@ -119,12 +119,12 @@ return (
           </p>
 
           {/* Cartes du round */}
-          {state?.currentRound?.cards && (
+          {state?.currentRound?.cards?.length > 0 && (
             <div className="flex gap-6 justify-center mb-6">
               <AnimatePresence mode="popLayout">
                 {state.currentRound.cards.map((c) => (
                   <motion.div
-                    key={c.id} // clé unique pour Framer Motion
+                    key={c.id || c.carte} // clé unique pour Framer Motion
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 20 }}
@@ -156,7 +156,7 @@ return (
           </div>
 
           {/* Mots révélés seulement si les deux joueurs ont joué */}
-          {state.words.length === 2 && (
+          {state?.words?.length === 2 && (
             <div className="mt-4">
               <h3>Mots joués :</h3>
               <ul>
@@ -170,7 +170,7 @@ return (
           )}
 
           <p className="mt-2 text-sm text-gray-400">
-            Essais ce round : {state.currentRound.attempts || 0}
+            Essais ce round : {state?.currentRound?.attempts ?? 0}
           </p>
         </div>
       )}
