@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route } from "react-router-dom";
-import Home from './pages/Home.jsx';
+import Home from "./pages/Home.jsx"
+import Pake from './pages/Pake.jsx';
 import APropos from './pages/APropos.jsx';
 import MentionsLegales from './pages/MentionsLegales.jsx';
 import PoliqueConfidentialite from './pages/PolitiqueConfidentialite.jsx';
@@ -20,6 +21,7 @@ function App() {
       <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
       <Routes>
         <Route path="/" element={<Home darkMode={darkMode} setDarkMode={setDarkMode} />} />
+        <Route path="/pake-de-cartes" element={<Pake darkMode={darkMode} setDarkMode={setDarkMode} />} />
         <Route path="/a-propos" element={<APropos darkMode={darkMode} setDarkMode={setDarkMode} />} />
         <Route path="/mentions-legales" element={<MentionsLegales darkMode={darkMode} setDarkMode={setDarkMode} />} />
         <Route path="/politique-confidentialite" element={<PoliqueConfidentialite darkMode={darkMode} setDarkMode={setDarkMode} />} />
