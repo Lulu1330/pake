@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 import MotEnCommunUI from "./MotEnCommunUI";
 
-const socket = io("http://localhost:3000"); // ⚡ adapte ton port backend
+const socket = io("https://pake-de-cartes.fr", {
+  withCredentials: true,
+});
 
 export default function MotEnCommunLogic() {
   const [room, setRoom] = useState(null);
