@@ -18,7 +18,7 @@ export default function Home() {
           Mot en Commun
         </Link>
         <Link
-          to="/pake"
+          to="/pake-de-cartes"
           className="w-64 text-center py-4 bg-green-600 hover:bg-green-700 rounded-2xl shadow-lg text-xl font-bold transition-transform transform hover:scale-105"
         >
           Pake

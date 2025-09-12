@@ -26,7 +26,7 @@ export default function Navbar({ darkMode, setDarkMode }) {
 
         {/* Liens + Thème */}
          <div className="flex flex-wrap items-center gap-4">
-          <Link to="/a-propos" className="hover:text-indigo-500 dark:hover:text-indigo-300 transition">
+          <Link to="/pake-de-cartes" className="hover:text-indigo-500 dark:hover:text-indigo-300 transition">
             Pake de Cartes
           </Link>
           <Link to="/a-propos" className="hover:text-indigo-500 dark:hover:text-indigo-300 transition">
@@ -38,7 +38,7 @@ export default function Navbar({ darkMode, setDarkMode }) {
           <Link to="/politique-confidentialite" className="hover:text-indigo-500 dark:hover:text-indigo-300 transition">
             Confidentialité
           </Link>
-         <Link to="/mot-en-commun" className="hover:text-indigo-500 dark:hover:text-indigo-300 transition">/*
+         <Link to="/mot-en-commun" className="hover:text-indigo-500 dark:hover:text-indigo-300 transition">
             Mot en Commun
           </Link>
           

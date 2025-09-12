@@ -50,12 +50,12 @@ export default function MotEnCommunUI({
     <div className="flex w-full max-w-7xl gap-6">
       
       {/* 📌 Historique (uniquement réussites) */}
-      <div className="w-1/4 bg-gray-800 p-3 rounded-2xl overflow-y-auto max-h-screen shadow-lg">
-        <h2 className="text-lg font-bold mb-3 text-indigo-400">Historique</h2>
-        <ul className="space-y-2">
+      <div className="order-2 md:order-1 w-full md:w-1/4 bg-gray-800 p-3 rounded-xl overflow-y-auto max-h-60 md:max-h-screen">
+        <h2 className="text-lg font-bold mb-2 text-indigo-400">Historique</h2>
+        <ul className="space-y-2 text-sm md:text-base">
           {state?.history?.map((h, i) => (
             <li key={i} className="p-2 bg-gray-700 rounded-lg">
-              <div className="flex flex-col">
+              <div className="flex justify-between">
                 <span className="text-sm text-gray-300">
                   {h.cards.map((c) => c.carte).join(" / ")}
                 </span>
@@ -70,8 +70,8 @@ export default function MotEnCommunUI({
       </div>
 
       {/* 🎮 Partie principale */}
-      <div className="flex-1 bg-gray-900 p-6 rounded-2xl shadow-xl text-center">
-        <h1 className="text-2xl font-bold mb-4 text-indigo-300">Mot en Commun</h1>
+      <div className="order-1 md:order-2 flex-1 bg-gray-900 p-4 md:p-6 rounded-xl shadow-lg flex flex-col items-center text-center">
+        <h1 className="text-xl md:text-2xl font-bold mb-4 text-indigo-400">Mot en Commun</h1>
 
         {/* === Si pas encore de partie === */}
         {!room && (
@@ -203,7 +203,7 @@ export default function MotEnCommunUI({
       </div>
 
       {/* 🚫 Mots bannis */}
-      <div className="w-1/4 bg-gray-800 p-3 rounded-2xl shadow-lg overflow-y-auto max-h-screen">
+      <div className="order-3 w-full md:w-1/4 bg-gray-800 p-3 rounded-xl shadow-lg overflow-y-auto max-h-40 md:max-h-screen">
         <h2 className="text-lg font-bold mb-3 text-red-400">Mots bannis</h2>
         <ul className="space-y-2">
           {state?.bannedWords?.length > 0 ? (
