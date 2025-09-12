@@ -10,8 +10,9 @@ const app = express();
 const server = http.createServer(app);
 
 const allowedOrigins = [
-  "https://pake-de-cartes.fr",   // ton domaine
-  "http://localhost:5173"        // pour dev local
+  "https://pake-de-cartes.fr",
+  "https://www.pake-de-cartes.fr",
+  "http://localhost:5173"
 ];
 
 const io = new Server(server, {
