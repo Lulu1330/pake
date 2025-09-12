@@ -48,11 +48,12 @@ export default function MotEnCommunUI({
             <div className="bg-gray-900 p-6 rounded-2xl shadow-lg w-full max-w-md mx-auto text-center">
               <button
                 onClick={createGame}
-                className="w-full bg-green-600 active:bg-green-700 py-3 rounded-xl font-bold text-lg mb-4 min-h-[44px]"
+                className="w-full bg-green-600 active:bg-green-700 focus:ring-2 focus:ring-green-400 py-3 rounded-xl font-bold text-lg mb-4 min-h-[44px]"
               >
                 Créer une partie
               </button>
-              <div className="flex flex-col md:flex-row gap-2">
+
+              <div className="flex flex-col md:flex-row gap-3">
                 <input
                   type="text"
                   placeholder="Code partie"
@@ -61,11 +62,12 @@ export default function MotEnCommunUI({
                   onKeyDown={(e) => {
                     if (e.key === "Enter") joinGame(joinCode);
                   }}
-                  className="flex-1 p-3 rounded-lg bg-gray-800 border border-gray-700 text-lg min-h-[44px]"
+                  className="flex-1 p-3 rounded-lg bg-gray-800 border border-gray-700 text-lg min-h-[44px] focus:ring-2 focus:ring-indigo-400"
                 />
+
                 <button
                   onClick={() => joinGame(joinCode)}
-                  className="bg-indigo-600 active:bg-indigo-700 px-6 py-3 rounded-xl text-lg min-h-[44px]"
+                  className="bg-indigo-600 active:bg-indigo-700 focus:ring-2 focus:ring-indigo-400 px-6 py-3 rounded-xl text-lg min-h-[44px] w-full md:w-auto"
                 >
                   Rejoindre
                 </button>
