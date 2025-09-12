@@ -65,7 +65,7 @@ export default function MotEnCommunUI({
 
                 <button
                   onClick={() => joinGame(joinCode)}          // <- passe joinCode
-                  className="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg"
+                  className="bg-indigo-600 hover:bg-indigo-700 px-6 py-3 rounded-xl text-lg w-full md:w-auto"
                 >
                   Rejoindre
                 </button>
