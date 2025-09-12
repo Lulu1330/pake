@@ -48,24 +48,24 @@ export default function MotEnCommunUI({
             <div className="bg-gray-900 p-6 rounded-2xl shadow-lg w-full max-w-md mx-auto text-center">
               <button
                 onClick={createGame}
-                className="w-full bg-green-600 hover:bg-green-700 py-3 rounded-xl font-bold text-lg mb-4"
+                className="w-full bg-green-600 active:bg-green-700 py-3 rounded-xl font-bold text-lg mb-4 min-h-[44px]"
               >
                 Créer une partie
               </button>
-              <div className="flex gap-2">
+              <div className="flex flex-col md:flex-row gap-2">
                 <input
                   type="text"
                   placeholder="Code partie"
-                  value={joinCode}                // <- utilise l’état joinCode
+                  value={joinCode}
                   onChange={(e) => setJoinCode(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") joinGame(joinCode); // <- passe joinCode
+                    if (e.key === "Enter") joinGame(joinCode);
                   }}
+                  className="flex-1 p-3 rounded-lg bg-gray-800 border border-gray-700 text-lg min-h-[44px]"
                 />
-
                 <button
-                  onClick={() => joinGame(joinCode)}          // <- passe joinCode
-                  className="bg-indigo-600 hover:bg-indigo-700 px-6 py-3 rounded-xl text-lg w-full md:w-auto"
+                  onClick={() => joinGame(joinCode)}
+                  className="bg-indigo-600 active:bg-indigo-700 px-6 py-3 rounded-xl text-lg min-h-[44px]"
                 >
                   Rejoindre
                 </button>
