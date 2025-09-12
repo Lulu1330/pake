@@ -1,61 +1,76 @@
-import { useState, useEffect } from "react";
-import { socket } from "../socket"; // ⚠️ adapte selon ton chemin
+import React, { useEffect, useState } from "react";
+import io from "socket.io-client";
 import MotEnCommunUI from "./MotEnCommunUI";
+
+const socket = io("http://localhost:3000"); // ⚡ adapte ton port backend
 
 export default function MotEnCommunLogic() {
   const [room, setRoom] = useState(null);
   const [role, setRole] = useState(null);
   const [state, setState] = useState(null);
   const [word, setWord] = useState("");
-  const [roundResult, setRoundResult] = useState(null);
+  const [joinCode, setJoinCode] = useState("");
 
+  // --- Écouteurs socket ---
   useEffect(() => {
-    socket.on("stateUpdate", (game) => setState(game));
-    socket.on("gameCreated", (roomCode) => setRoom(roomCode));
+    socket.on("gameCreated", (room) => {
+      console.log("Partie créée :", room);
+    });
+
     socket.on("gameJoined", ({ room, role }) => {
       setRoom(room);
       setRole(role);
     });
+
+    socket.on("stateUpdate", (game) => {
+      setState(game);
+    });
+
     socket.on("roundResult", (result) => {
-    setRoundResult(result);
-  });
+      console.log("Résultat du round :", result);
+    });
 
     return () => {
-      socket.off("stateUpdate");
       socket.off("gameCreated");
       socket.off("gameJoined");
+      socket.off("stateUpdate");
       socket.off("roundResult");
     };
   }, []);
-   useEffect(() => {
-    if (state?.currentRound?.cards) {
-      setRoundResult(null);
-    }
-  }, [state?.currentRound?.cards]);
 
-  const createGame = () => socket.emit("createGame");
-  const joinGame = (roomCode) => socket.emit("joinGame", roomCode);
+  // --- Fonctions ---
+  const createGame = () => {
+    socket.emit("createGame");
+  };
+
+  const joinGame = (code) => {
+    if (!code) return;
+    socket.emit("joinGame", code); // envoie juste le code
+  };
+
   const playWord = () => {
     if (!word.trim()) return;
-    socket.emit("playWord", { room, player: role, word });
+    socket.emit("playWord", { room, word });
     setWord("");
   };
-  const hasPlayedThisRound = state?.visibleWords?.some(
-    (w) => w.role === role && w.word !== null
-  );
+
+  const skipRound = () => {
+    socket.emit("skipRound", { room });
+  };
+
   return (
     <MotEnCommunUI
-      state={state}
       room={room}
       role={role}
+      state={state}
       word={word}
-      roundResult = {roundResult}
       setWord={setWord}
       createGame={createGame}
       joinGame={joinGame}
       playWord={playWord}
-      socket={socket}
-      hasPlayedThisRound = {hasPlayedThisRound}
+      skipRound={skipRound}
+      joinCode={joinCode}
+      setJoinCode={setJoinCode}
     />
   );
 }
