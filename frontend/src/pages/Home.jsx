@@ -12,10 +12,10 @@ export default function Home() {
       {/* Boutons principaux */}
       <main className="flex flex-col gap-6 items-center mt-16">
         <Link
-          to="/mot-en-commun"
+          to="/morpion"
           className="w-64 text-center py-4 bg-indigo-600 hover:bg-indigo-700 rounded-2xl shadow-lg text-xl font-bold transition-transform transform hover:scale-105"
         >
-          Mot en Commun
+          Morpion
         </Link>
         <Link
           to="/pake-de-cartes"

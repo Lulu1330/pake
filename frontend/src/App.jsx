@@ -5,13 +5,13 @@ import Pake from './pages/Pake.jsx';
 import APropos from './pages/APropos.jsx';
 import MentionsLegales from './pages/MentionsLegales.jsx';
 import PoliqueConfidentialite from './pages/PolitiqueConfidentialite.jsx';
-import MotEnCommunPage from './pages/MotEnCommun.jsx'; // 🔥 importe la nouvelle page
 import Navbar from './components/Navbar.jsx';
 import ReactGA from "react-ga4";
+import Game from "./pages/MotEnCommun.jsx";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
-
+  
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
   }, [darkMode]);
@@ -25,7 +25,7 @@ function App() {
         <Route path="/a-propos" element={<APropos darkMode={darkMode} setDarkMode={setDarkMode} />} />
         <Route path="/mentions-legales" element={<MentionsLegales darkMode={darkMode} setDarkMode={setDarkMode} />} />
         <Route path="/politique-confidentialite" element={<PoliqueConfidentialite darkMode={darkMode} setDarkMode={setDarkMode} />} />
-        <Route path="/mot-en-commun" element={<MotEnCommunPage darkMode={darkMode} setDarkMode={setDarkMode} />} /> {/* 🔥 nouvelle route */}
+        <Route path="/morpion" element={<Game darkMode={darkMode} setDarkMode={setDarkMode} />} /> {/* 🔥 nouvelle route */}
       </Routes>
     </div>
   );
