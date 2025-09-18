@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { motion } from "framer-motion";
 
-const socket = io("http://localhost:3000", { transports: ["websocket"] });
+const socket = io("https://pake-de-cartes.fr", {
+  transports: ["websocket"], // pour forcer le vrai websocket
+});
 
 // Limite de tentatives par round
 const MAX_ATTEMPTS = 5;
@@ -54,6 +56,7 @@ export default function MotEnCommun() {
       setRound(data.round);
       setGuess("");
       setWaiting(false);
+      setInfoMessage("");
 
       if (data.solution) {
         setBannedWords((prev) => [...prev, data.solution.toLowerCase()]);
@@ -66,6 +69,7 @@ export default function MotEnCommun() {
       setAttempts([]);
       setGuess("");
       setWaiting(false);
+      setInfoMessage("");
     });
 
     socket.on("roundFail", (data) => {
@@ -76,17 +80,17 @@ export default function MotEnCommun() {
       setScore((s) => ({ ...s, losses: s.losses + 1 }));
       setGuess("");
       setWaiting(true); // attendre le "newRound" que le serveur envoie après
+      setInfoMessage("");
     });
 
     socket.on("roundMismatch", (data) => {
-      // Juste afficher une info mais ne pas incrémenter les défaites
-      alert(data.message || "⚠️ Pas le même mot, réessayez !");
-      setWaiting(false); // débloquer le champ de saisie
+      setInfoMessage(data.message || "❌ Pas le même mot, réessayez !");
+      setWaiting(false);
     });
 
-      socket.on("gameEnd", () => {
-        setWaiting(true);
-      });
+    socket.on("gameEnd", () => {
+      setWaiting(true);
+    });
 
       return () => {
         socket.removeAllListeners();
@@ -305,6 +309,11 @@ export default function MotEnCommun() {
               <p className="mt-1 text-xs text-gray-500">
                 Essais restants : {MAX_ATTEMPTS - myAttempts.length}
               </p>
+              {infoMessage && (
+              <p className="mt-2 text-sm text-orange-600">
+                {infoMessage}
+              </p>
+              )}
             </div>
 
             {/* ❤️ Tentatives */}
