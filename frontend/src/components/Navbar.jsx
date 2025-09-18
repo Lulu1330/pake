@@ -38,7 +38,7 @@ export default function Navbar({ darkMode, setDarkMode }) {
           <Link to="/politique-confidentialite" className="hover:text-indigo-500 dark:hover:text-indigo-300 transition">
             Confidentialité
           </Link>
-         <Link to="/morpion" className="hover:text-indigo-500 dark:hover:text-indigo-300 transition">
+         <Link to="/mot-en-commun" className="hover:text-indigo-500 dark:hover:text-indigo-300 transition">
             Mot en Commun
           </Link>
           

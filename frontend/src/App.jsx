@@ -25,7 +25,7 @@ function App() {
         <Route path="/a-propos" element={<APropos darkMode={darkMode} setDarkMode={setDarkMode} />} />
         <Route path="/mentions-legales" element={<MentionsLegales darkMode={darkMode} setDarkMode={setDarkMode} />} />
         <Route path="/politique-confidentialite" element={<PoliqueConfidentialite darkMode={darkMode} setDarkMode={setDarkMode} />} />
-        <Route path="/morpion" element={<Game darkMode={darkMode} setDarkMode={setDarkMode} />} /> {/* 🔥 nouvelle route */}
+        <Route path="/mot-en-commun" element={<Game darkMode={darkMode} setDarkMode={setDarkMode} />} /> {/* 🔥 nouvelle route */}
       </Routes>
     </div>
   );
