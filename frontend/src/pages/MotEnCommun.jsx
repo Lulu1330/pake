@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 
 const socket = io("https://pake-de-cartes.fr", {
   transports: ["websocket"], // pour forcer le vrai websocket
+  withCredentials: true
 });
 
 // Limite de tentatives par round

@@ -6,7 +6,14 @@ import Database from "better-sqlite3";
 const app = express();
 const server = createServer(app);
 const io = new Server(server, {
-  cors: { origin: "*" },
+  cors: {
+    origin: [
+      "https://pake-de-cartes.fr",   // ton backend si tu y accèdes direct
+      "pake-three.vercel.app" // ton frontend React déployé
+    ],
+    methods: ["GET", "POST"],
+    credentials: true
+  }
 });
 
 // --- DB ---

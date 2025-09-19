@@ -13,12 +13,12 @@
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
-    "express": "^4.19.2",
-    "socket.io": "^4.7.5",
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7"
   },
   "engines": {
-  "node": "22.x"
-}
+    "node": "22.x"
+  }
 }
