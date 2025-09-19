@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { motion } from "framer-motion";
 
-const socket = io("https://pake-de-cartes.fr", {
-  transports: ["websocket"], // pour forcer le vrai websocket
-  withCredentials: true
+const socket = io("https://api.pake-de-cartes.fr", {
+  transports: ["websocket"],
 });
 
 // Limite de tentatives par round

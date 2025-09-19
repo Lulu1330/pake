@@ -9,7 +9,7 @@ const io = new Server(server, {
   cors: {
     origin: [
       "https://pake-de-cartes.fr",   // ton backend si tu y accèdes direct
-      "pake-three.vercel.app" // ton frontend React déployé
+      "https://pake-three.vercel.app" // ton frontend React déployé
     ],
     methods: ["GET", "POST"],
     credentials: true
