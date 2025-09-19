@@ -209,9 +209,9 @@ export default function MotEnCommun() {
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-4 gap-4 w-full max-w-6xl">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full max-w-6xl">
           {/* Score */}
-          <div className="bg-white rounded-xl shadow p-4 col-span-1">
+          <div className="bg-white rounded-xl shadow p-4 col-span-1 order-1 md:order-none">
             <h3 className="font-semibold mb-2">🏆 Score</h3>
             <p className="text-green-600">Victoires : {score.wins}</p>
             <p className="text-red-600">Défaites : {score.losses}</p>
@@ -224,7 +224,7 @@ export default function MotEnCommun() {
           </div>
 
           {/* Historique */}
-          <div className="bg-white rounded-xl shadow p-4 col-span-1">
+          <div className="bg-white rounded-xl shadow p-4 col-span-1 order-2 md:order-none">
             <h3 className="font-semibold mb-2">📜 Tours précédents</h3>
             {pastRounds.length === 0 ? (
               <p className="text-sm text-gray-500">Aucun pour l’instant</p>
@@ -254,7 +254,7 @@ export default function MotEnCommun() {
           </div>
 
           {/* Jeu */}
-          <div className="col-span-2 flex flex-col gap-4">
+          <div className="col-span-1 md:col-span-2 flex flex-col gap-4 order-4 md:order-non">
             <div className="flex justify-between mb-4">
               <p>
                 Room: <span className="font-mono">{room}</span>
@@ -265,7 +265,7 @@ export default function MotEnCommun() {
             </div>
 
             {/* Cartes */}
-            <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               {["card1", "card2"].map(
                 (c) =>
                   cards?.[c] && (
@@ -366,7 +366,7 @@ export default function MotEnCommun() {
           </div>
 
           {/* Mots bannis */}
-          <div className="bg-white rounded-xl shadow p-4 col-span-1">
+          <div className="bg-white rounded-xl shadow p-4 col-span-1 order-3 md:order-none">
             <h3 className="font-semibold mb-2">🚫 Mots bannis</h3>
             {bannedWords.length === 0 ? (
               <p className="text-sm text-gray-500">Aucun</p>
