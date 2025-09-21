@@ -133,32 +133,35 @@ export default function Pake({ darkMode, setDarkMode }) {
   };
 
   // ⚡ Correction ici : bonne URL + variable env
-  const fetchCartes = async () => {
-    setIsLoading(true);
-    try {
-      const API_URL =
-        import.meta.env.VITE_API_URL || "http://localhost:3000";
-      const res = await fetch(`${API_URL}/tirage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          themes: config.selectedThemes,
-          nb_cartes: config.nbCartes,
-        }),
-      });
-      if (!res.ok) throw new Error();
-      const data = await res.json();
-      setCartes(data);
-      setSavedTirages((prev) => [...prev, data]);
-      setCurrent(0);
-      setPoints({});
-      setErreur("");
-    } catch {
-      setErreur("Erreur lors du tirage. Vérifie le backend.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const API_URL =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:3000"
+    : "https://api.pake-de-cartes.fr"; // ton backend Render/OVH
+
+const fetchCartes = async () => {
+  setIsLoading(true);
+  try {
+    const res = await fetch(`${API_URL}/tirage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        themes: config.selectedThemes,
+        nb_cartes: config.nbCartes,
+      }),
+    });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    setCartes(data);
+    setSavedTirages((prev) => [...prev, data]);
+    setCurrent(0);
+    setPoints({});
+    setErreur("");
+  } catch {
+    setErreur("Erreur lors du tirage. Vérifie le backend.");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const resetGame = () => {
     setCartes([]);
