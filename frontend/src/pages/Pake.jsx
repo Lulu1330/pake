@@ -136,7 +136,7 @@ export default function Pake({ darkMode, setDarkMode }) {
   const fetchCartes = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch("https://pake-ke5g.onrender.com/tirage", {
+      const res = await fetch("https:/api.pake-de-cartes.fr/tirage", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
