@@ -16,7 +16,6 @@ import { VscJersey } from "react-icons/vsc";
 import CardDisplay from "../components/CardDisplay";
 import ReglesModal from "../components/ReglesModal";
 import ThemeSelector from "../components/ThemeSelector";
-import ParametresPartie from "../components/ParametresPartie.jsx";
 import { allThemes, equipeColors } from "../components/Constants";
 
 import "../index.css";
@@ -133,10 +132,13 @@ export default function Pake({ darkMode, setDarkMode }) {
     });
   };
 
+  // ⚡ Correction ici : bonne URL + variable env
   const fetchCartes = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch("https:/api.pake-de-cartes.fr/tirage", {
+      const API_URL =
+        import.meta.env.VITE_API_URL || "http://localhost:3000";
+      const res = await fetch(`${API_URL}/tirage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -239,7 +241,6 @@ export default function Pake({ darkMode, setDarkMode }) {
       return copy;
     });
   };
-
 
   /* --------------------------------------------------
    * RENDU JSX

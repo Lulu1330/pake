@@ -2,18 +2,40 @@ import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import Database from "better-sqlite3";
+import cors from "cors";
+import tirageRouter from "./tirage.js";
 
 const app = express();
+
+// CORS doit être avant les routes
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://pake-de-cartes.fr",
+      "https://pake-three.vercel.app",
+    ],
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
+
+app.use(express.json());
+
+// brancher la route tirage
+app.use("/", tirageRouter);
+
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
     origin: [
-      "https://pake-de-cartes.fr",   // ton backend si tu y accèdes direct
-      "https://pake-three.vercel.app" // ton frontend React déployé
+      "http://localhost:5173",
+      "https://pake-de-cartes.fr",
+      "https://pake-three.vercel.app",
     ],
     methods: ["GET", "POST"],
-    credentials: true
-  }
+    credentials: true,
+  },
 });
 
 // --- DB ---
