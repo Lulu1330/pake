@@ -13,6 +13,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://pake-de-cartes.fr",
+      "https://www.pake-de-cartes.fr",
       "https://pake-three.vercel.app",
     ],
     methods: ["GET", "POST"],
@@ -31,6 +32,7 @@ const io = new Server(server, {
     origin: [
       "http://localhost:5173",
       "https://pake-de-cartes.fr",
+      "https://www.pake-de-cartes.fr",
       "https://pake-three.vercel.app",
     ],
     methods: ["GET", "POST"],
@@ -262,4 +264,4 @@ io.on("connection", (socket) => {
 
 // --- START SERVER ---
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, "0.0.0.0", () => console.log(`🚀 Backend lancé sur http://localhost:${PORT}`));
+server.listen(PORT, () => console.log(`🚀 Backend lancé sur http://localhost:${PORT}`));
