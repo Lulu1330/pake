@@ -182,32 +182,36 @@ export default function MotEnCommun() {
   }, [attempts]);
 
   return (
-    <div className="min-h-screen p-6 flex flex-col items-center bg-slate-50">
-      <h1 className="text-2xl font-bold mb-4">Mot en commun (tour par tour)</h1>
+    <div className="min-h-screen p-6 flex flex-col items-center bg-gradient-to-br from-purple-700 via-indigo-800 to-black">
 
       {!joined ? (
-        <div className="p-4 bg-white rounded shadow w-full max-w-md">
-          <div className="mt-4 flex gap-2">
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="p-10 bg-white rounded-2xl shadow-2xl w-full max-w-lg text-center">
+          <div className="flex flex-col gap-10 items-center">
             <button
               onClick={handleCreate}
-              className="px-3 py-2 text-white rounded bg-green-600"
+              className="w-72 py-6 bg-green-600 text-white text-2xl font-bold rounded-2xl shadow-lg hover:bg-green-700 hover:scale-105 transition-transform duration-200"
             >
-              Créer une partie
+              ➕ Créer une partie
             </button>
-            <input
-              value={room}
-              onChange={(e) => setRoom(e.target.value.toUpperCase())}
-              placeholder="Code room"
-              className="border px-2 py-1 rounded flex-1"
-            />
-            <button
-              onClick={handleJoin}
-              className="px-3 py-2 text-white rounded bg-blue-600"
-            >
-              Rejoindre
-            </button>
+
+            <div className="flex gap-4 w-72">
+              <input
+                value={room}
+                onChange={(e) => setRoom(e.target.value.toUpperCase())}
+                placeholder="Code room"
+                className="flex-1 px-4 py-4 text-lg text-center border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+              <button
+                onClick={handleJoin}
+                className="px-6 py-4 bg-blue-600 text-white text-2xl font-bold rounded-xl shadow-lg hover:bg-blue-700 hover:scale-105 transition-transform duration-200"
+              >
+                🔗
+              </button>
+            </div>
           </div>
         </div>
+      </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full max-w-6xl">
           {/* Score */}
@@ -255,12 +259,12 @@ export default function MotEnCommun() {
 
           {/* Jeu */}
           <div className="col-span-1 md:col-span-2 flex flex-col gap-4 order-4 md:order-non">
-            <div className="flex justify-between mb-4">
+            <div className="flex justify-between mb-4 text-teal-100">
               <p>
-                Room: <span className="font-mono">{room}</span>
+                Room: <span className="font-bold text-amber-50">{room}</span>
               </p>
               <p>
-                Tour: {round}/{maxRounds}
+                Tour: {round}
               </p>
             </div>
 
@@ -273,7 +277,7 @@ export default function MotEnCommun() {
                       key={c}
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      className="w-60 h-80 p-6 rounded-xl shadow-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex flex-col justify-center items-center text-center text-white"
+                      className="w-60 h-80 p-6 rounded-xl shadow-lg bg-gradient-to-br from-red-400 to-red-600 flex flex-col justify-center items-center text-center text-white"
                     >
                       <strong className="text-xl">{cards[c].carte}</strong>
                       <p className="text-sm opacity-90 mt-2">{cards[c].theme}</p>
@@ -302,7 +306,7 @@ export default function MotEnCommun() {
                 </button>
               </div>
               {waiting && (
-                <p className="mt-2 text-sm text-gray-600">
+                <p className="mt-2 text-sm text-teal-100">
                   ⏳ En attente de l’autre joueur...
                 </p>
               )}
@@ -318,7 +322,7 @@ export default function MotEnCommun() {
 
             {/* ❤️ Tentatives */}
             <div className="mt-4">
-              <p className="font-semibold">Tentatives restantes :</p>
+              <p className="font-semibold text-teal-100">Tentatives restantes :</p>
               <div className="flex space-x-1 text-2xl">
                 {Array.from({ length: MAX_ATTEMPTS }).map((_, i) => (
                   <span key={i}>{i < MAX_ATTEMPTS - myAttempts.length ? "❤️" : "🤍"}</span>
@@ -327,16 +331,16 @@ export default function MotEnCommun() {
             </div>
 
             {/* Essais */}
-            <h2 className="mt-6 font-bold">📝 Essais (tour en cours)</h2>
+            <h2 className="mt-6 font-bold text-teal-100">📝 Essais (tour en cours)</h2>
             {myAttempts.length === 0 && otherAttempts.length === 0 ? (
-              <p className="text-gray-500">Aucun essai pour l’instant</p>
+              <p className="text-teal-200">Aucun essai pour l’instant</p>
             ) : (
               (() => {
                 // nombre de tours synchro
                 const pairs = Math.min(myAttempts.length, otherAttempts.length);
                 if (pairs === 0) {
                   return (
-                    <p className="italic text-gray-400">
+                    <p className="italic text-teal-200">
                       En attente de l’autre joueur…
                     </p>
                   );
