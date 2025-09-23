@@ -182,7 +182,7 @@ export default function MotEnCommun() {
   }, [attempts]);
 
   return (
-    <div className="min-h-screen p-6 flex flex-col items-center bg-gradient-to-br from-purple-700 via-indigo-800 to-black">
+    <div className="min-h-screen p-6 flex flex-col items-center bg-gradient-to-br from-purple-700 via-indigo-800 to-green-700">
 
       {!joined ? (
       <div className="flex items-center justify-center min-h-screen">
