@@ -269,7 +269,7 @@ export default function MotEnCommun() {
             </div>
 
             {/* Cartes */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-6 mb-4 justify-items-center">
               {["card1", "card2"].map(
                 (c) =>
                   cards?.[c] && (
@@ -277,10 +277,10 @@ export default function MotEnCommun() {
                       key={c}
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      className="w-60 h-80 p-6 rounded-xl shadow-lg bg-gradient-to-br from-red-400 to-red-600 flex flex-col justify-center items-center text-center text-white"
+                      className="w-32 h-48 sm:w-44 sm:h-64 md:w-60 md:h-80 p-4 rounded-xl shadow-lg bg-gradient-to-br from-red-400 to-red-600 flex flex-col justify-center items-center text-center text-white"
                     >
-                      <strong className="text-xl">{cards[c].carte}</strong>
-                      <p className="text-sm opacity-90 mt-2">{cards[c].theme}</p>
+                      <strong className="text-lg sm:text-xl">{cards[c].carte}</strong>
+                      <p className="text-xs sm:text-sm opacity-90 mt-2">{cards[c].theme}</p>
                     </motion.div>
                   )
               )}
