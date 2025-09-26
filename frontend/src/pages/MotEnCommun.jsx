@@ -291,19 +291,24 @@ export default function MotEnCommun() {
               <label className="block mb-2">Ton mot :</label>
               <div className="flex gap-2">
                 <input
-                  value={guess}
-                  onChange={(e) => setGuess(e.target.value)}
-                  placeholder="Entre ton mot"
-                  className="border px-2 py-1 rounded flex-1"
-                  disabled={waiting}
-                />
-                <button
-                  onClick={submitGuess}
-                  className="px-4 py-2 rounded text-white bg-indigo-600 disabled:bg-gray-400"
-                  disabled={waiting}
-                >
-                  Envoyer
-                </button>
+                value={guess}
+                onChange={(e) => setGuess(e.target.value)}
+                placeholder="Entre ton mot"
+                className="border px-2 py-1 rounded flex-1"
+                disabled={waiting}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    submitGuess();
+                  }
+                }}
+              />
+              <button
+                onClick={submitGuess}
+                className="px-4 py-2 rounded text-white bg-indigo-600 disabled:bg-gray-400"
+                disabled={waiting}
+              >
+                Envoyer
+              </button>
               </div>
               {waiting && (
                 <p className="mt-2 text-sm text-teal-100">
@@ -357,7 +362,7 @@ export default function MotEnCommun() {
                             <span className="italic">{me.guess}</span>
                           </div>
                           <div className="flex-1 p-2 border rounded bg-red-100">
-                            <span className="font-semibold">Adversaire</span> →{" "}
+                            <span className="font-semibold">Partenaire</span> →{" "}
                             <span className="italic">{other.guess}</span>
                           </div>
                         </div>
